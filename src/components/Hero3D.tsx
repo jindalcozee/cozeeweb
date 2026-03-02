@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useMemo, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { MoveRight } from "lucide-react";
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
 import { Button } from "@/components/ui/button";
- 
+
 export function Hero3D() {
   const [titleNumber, setTitleNumber] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -40,7 +41,7 @@ export function Hero3D() {
         className="-top-40 left-0 md:left-60 md:-top-20"
         fill="var(--color-crema)"
       />
-      
+
       <div className="flex h-full flex-col md:flex-row">
         {/* Left content */}
         <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center items-start">
@@ -57,13 +58,13 @@ export function Hero3D() {
                   animate={
                     titleNumber === index
                       ? {
-                          y: 0,
-                          opacity: 1,
-                        }
+                        y: 0,
+                        opacity: 1,
+                      }
                       : {
-                          y: titleNumber > index ? -150 : 150,
-                          opacity: 0,
-                        }
+                        y: titleNumber > index ? -150 : 150,
+                        opacity: 0,
+                      }
                   }
                 >
                   {title}
@@ -74,27 +75,29 @@ export function Hero3D() {
           <p className="mt-4 text-[var(--color-crema)]/80 max-w-lg text-lg md:text-xl mb-8">
             Like a hug you can wear. Experience the ultimate comfort and see why millions are joining the Cozee Squad.
           </p>
-          <Button size="lg" className="gap-4 bg-[var(--color-crema)] text-[var(--color-rojo)] hover:bg-[var(--color-crema)]/90 border-none cursor-pointer">
-            Shop Now <MoveRight className="w-4 h-4" />
-          </Button>
+          <Link to="/shop">
+            <Button size="lg" className="gap-4 bg-[var(--color-crema)] text-[var(--color-rojo)] hover:bg-[var(--color-crema)]/90 border-none cursor-pointer">
+              Shop Now <MoveRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
 
         {/* Right content */}
         <div className="flex-1 relative min-h-[300px] md:min-h-full flex items-center justify-center p-4 md:p-8 pb-8 md:pb-8">
-          <motion.img 
-            src="/red-removebg-preview.png" 
+          <motion.img
+            src="/red-removebg-preview.png"
             alt="Cozee Wearable"
             className="w-full h-full object-contain max-h-[300px] md:max-h-[400px] drop-shadow-2xl origin-bottom"
-            animate={isMobile ? {} : { 
+            animate={isMobile ? {} : {
               rotate: [0, 6, 2, 8, 1, 5, 0],
               x: [0, 15, 5, 22, 2, 12, 0],
               y: [0, -8, -2, -10, -1, -5, 0]
             }}
-            transition={{ 
-              repeat: Infinity, 
+            transition={{
+              repeat: Infinity,
               duration: 8,
               times: [0, 0.15, 0.35, 0.55, 0.75, 0.85, 1],
-              ease: "easeInOut" 
+              ease: "easeInOut"
             }}
           />
         </div>
