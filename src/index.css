@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-crema: #fff6ea;
+  --color-crema: #111111;
   --color-rojo: #bd2025;
-  --color-crema-25: #fff6ea40;
+  --color-crema-25: #11111140;
   --color-rojo-25: #bd202540;
   --font-logo: "Montserrat", sans-serif;
   
