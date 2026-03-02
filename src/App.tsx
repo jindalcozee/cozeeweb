@@ -9,6 +9,7 @@ import { SmokeEffect } from '@/components/ui/smoke-effect';
 import { Header } from './components/Header';
 import { CartDrawer } from './components/CartDrawer';
 import { MenuDrawer } from './components/MenuDrawer';
+import { ScrollToTop } from './components/ScrollToTop';
 import { Home } from './pages/Home';
 import { Product } from './pages/Product';
 import { Checkout } from './pages/Checkout';
@@ -16,9 +17,10 @@ import { Checkout } from './pages/Checkout';
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen p-4 md:p-8 max-w-[1600px] mx-auto flex flex-col">
         <SmokeEffect />
-        
+
         {/* Global UI Components */}
         <Header />
         <CartDrawer />
@@ -32,7 +34,7 @@ export default function App() {
             <Route path="/checkout" element={<Checkout />} />
           </Routes>
         </div>
-        
+
         <StackedCircularFooter />
       </div>
     </Router>
