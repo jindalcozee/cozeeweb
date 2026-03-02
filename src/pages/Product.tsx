@@ -39,7 +39,7 @@ export function Product() {
             transition={{ duration: 0.5 }}
             src={product.image}
             alt={product.title}
-            className="w-full h-full object-contain drop-shadow-2xl mix-blend-multiply"
+            className="w-full h-full object-contain drop-shadow-2xl"
             referrerPolicy="no-referrer"
           />
         </div>
