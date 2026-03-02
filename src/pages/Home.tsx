@@ -96,8 +96,7 @@ export function Home() {
         {filteredProducts.map((product) => (
           <Link to={`/product/${product.id}`} key={product.id} className="group cursor-pointer flex flex-col">
             <div
-              className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative border border-[#C11B17]"
-              style={{ backgroundColor: product.bgColor || 'rgba(189, 32, 37, 0.05)' }}
+              className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative border border-[#C11B17] bg-transparent"
             >
               <img
                 src={product.image}

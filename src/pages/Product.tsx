@@ -8,7 +8,7 @@ import { FAQ } from '../components/FAQ';
 export function Product() {
   const { id } = useParams();
   const { addToCart } = useStore();
-  
+
   const product = products.find(p => p.id === Number(id));
 
   if (!product) {
@@ -32,12 +32,12 @@ export function Product() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         {/* Product Image */}
-        <div className="relative aspect-[4/5] lg:aspect-square bg-[#FFF5EB] rounded-3xl border border-[#C11B17] overflow-hidden flex items-center justify-center p-8">
-          <motion.img 
+        <div className="relative aspect-[4/5] lg:aspect-square bg-transparent rounded-3xl border border-[#C11B17] overflow-hidden flex items-center justify-center p-8">
+          <motion.img
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            src={product.image} 
+            src={product.image}
             alt={product.title}
             className="w-full h-full object-contain drop-shadow-2xl mix-blend-multiply"
             referrerPolicy="no-referrer"
@@ -51,15 +51,15 @@ export function Product() {
             <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-rojo)]/30"></div>
             <span className="text-[var(--color-rojo)]/60 font-medium uppercase tracking-wider text-sm">In Stock</span>
           </div>
-          
+
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-rojo)] leading-tight mb-4 tracking-tight">
             {product.title}
           </h1>
-          
+
           <div className="text-2xl md:text-3xl font-medium text-[var(--color-rojo)] mb-8">
             {product.price}
           </div>
-          
+
           <p className="text-lg md:text-xl text-[var(--color-rojo)]/80 leading-relaxed mb-10">
             {product.description}
           </p>
@@ -79,7 +79,7 @@ export function Product() {
             </div>
           </div>
 
-          <button 
+          <button
             onClick={() => addToCart(product.id)}
             className="w-full py-5 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl shadow-[var(--color-rojo)]/20"
           >
