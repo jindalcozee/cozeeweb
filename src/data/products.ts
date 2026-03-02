@@ -1,0 +1,44 @@
+export const categories = ['All', 'Originals', 'Sleepwear', 'Blankets', 'Accessories'];
+
+export const products = [
+  {
+    id: 1,
+    title: 'Cozee™ Original - Navy',
+    price: '2500 INR',
+    category: 'Originals',
+    image: '/navyyy.png.PNG',
+    bgColor: '#FFF5EB',
+    contain: true,
+    description: 'The original Cozee wearable blanket in a deep, rich navy blue. Made with ultra-soft flannel fleece on the outside and warm sherpa fleece on the inside. Perfect for those chilly evenings.',
+  },
+  {
+    id: 2,
+    title: 'Cozee™ Original - Grey',
+    price: '2500 INR',
+    category: 'Originals',
+    image: '/greyyy.png.PNG',
+    bgColor: '#FFF5EB',
+    contain: true,
+    description: 'Stay neutral and cozee with our Grey edition. Featuring the same premium dual-layer construction, this versatile color matches any lounging aesthetic.',
+  },
+  {
+    id: 3,
+    title: 'Cozee™ Original - Black',
+    price: '2500 INR',
+    category: 'Originals',
+    image: '/blackyyy.png.PNG',
+    bgColor: '#FFF5EB',
+    contain: true,
+    description: 'Sleek, stylish, and incredibly warm. The Black Cozee features a dark exterior that hides stains while keeping you wrapped in pure sherpa comfort.',
+  },
+  {
+    id: 4,
+    title: 'Cozee™ Original - Pink',
+    price: '2500 INR',
+    category: 'Originals',
+    image: '/pinkyyy.png.PNG',
+    bgColor: '#FFF5EB',
+    contain: true,
+    description: 'Add a pop of color to your comfort with the Pink Cozee. Super soft, super warm, and perfectly vibrant for your cozy nights in.',
+  },
+];
