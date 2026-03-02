@@ -8,10 +8,11 @@ export function MenuDrawer() {
 
   const menuItems = [
     { label: 'Home', path: '/' },
-    { label: 'Shop All', path: '/' },
-    { label: 'Originals', path: '/' },
-    { label: 'About Us', path: '/' },
-    { label: 'Contact', path: '/' },
+    { label: 'Shop All', path: '/?category=All' },
+    { label: 'Originals', path: '/?category=Originals' },
+    { label: 'Sleepwear', path: '/?category=Sleepwear' },
+    { label: 'About Us', path: '/#about' },
+    { label: 'FAQ', path: '/#faq' },
   ];
 
   return (
@@ -26,7 +27,7 @@ export function MenuDrawer() {
             onClick={toggleMenu}
             className="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
           />
-          
+
           {/* Drawer */}
           <motion.div
             initial={{ x: '-100%' }}
@@ -50,8 +51,8 @@ export function MenuDrawer() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <Link 
-                    to={item.path} 
+                  <Link
+                    to={item.path}
                     onClick={toggleMenu}
                     className="text-4xl md:text-5xl font-bold text-[var(--color-rojo)] hover:opacity-60 transition-opacity tracking-tight"
                   >
