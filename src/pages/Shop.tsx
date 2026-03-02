@@ -83,6 +83,7 @@ export function Shop() {
                             <img
                                 src={product.image}
                                 alt={product.title}
+                                style={product.imageFilter ? { filter: product.imageFilter } : undefined}
                                 className={`w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out drop-shadow-2xl ${product.contain ? 'object-contain p-4' : 'object-cover'}`}
                                 referrerPolicy="no-referrer"
                             />

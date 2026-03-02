@@ -39,6 +39,7 @@ export const products = [
     image: '/pinkyyy.png.PNG',
     bgColor: '#FFF5EB',
     contain: true,
+    imageFilter: 'saturate(1.6) brightness(1.08) contrast(1.05)',
     description: 'Add a pop of color to your comfort with the Pink Cozee. Super soft, super warm, and perfectly vibrant for your cozy nights in.',
   },
 ];

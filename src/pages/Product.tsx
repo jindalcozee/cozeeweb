@@ -39,6 +39,7 @@ export function Product() {
             transition={{ duration: 0.5 }}
             src={product.image}
             alt={product.title}
+            style={product.imageFilter ? { filter: product.imageFilter } : undefined}
             className="w-full h-full object-contain drop-shadow-2xl"
             referrerPolicy="no-referrer"
           />
