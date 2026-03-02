@@ -5,7 +5,6 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { StackedCircularFooter } from '@/components/ui/stacked-circular-footer';
-import { SmokeEffect } from '@/components/ui/smoke-effect';
 import { Header } from './components/Header';
 import { CartDrawer } from './components/CartDrawer';
 import { MenuDrawer } from './components/MenuDrawer';
@@ -19,7 +18,6 @@ export default function App() {
     <Router>
       <ScrollToTop />
       <div className="min-h-screen p-4 md:p-8 max-w-[1600px] mx-auto flex flex-col">
-        <SmokeEffect />
 
         {/* Global UI Components */}
         <Header />
