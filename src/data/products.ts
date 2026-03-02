@@ -1,4 +1,4 @@
-export const categories = ['All', 'Originals', 'Sleepwear', 'Blankets', 'Accessories'];
+export const categories = ['All', 'Originals', 'Blankets', 'Accessories'];
 
 export const products = [
   {

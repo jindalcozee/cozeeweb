@@ -10,7 +10,6 @@ export function MenuDrawer() {
     { label: 'Home', path: '/' },
     { label: 'Shop All', path: '/shop?category=All' },
     { label: 'Originals', path: '/shop?category=Originals' },
-    { label: 'Sleepwear', path: '/shop?category=Sleepwear' },
     { label: 'About Us', path: '/#about' },
     { label: 'FAQ', path: '/#faq' },
   ];
