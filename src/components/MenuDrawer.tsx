@@ -12,6 +12,7 @@ export function MenuDrawer() {
     { label: 'Originals', path: '/shop?category=Originals' },
     { label: 'About Us', path: '/#about' },
     { label: 'FAQ', path: '/#faq' },
+    { label: 'Contact Us', path: '/contact' },
   ];
 
   return (
@@ -64,7 +65,7 @@ export function MenuDrawer() {
             <div className="p-8 border-t border-[var(--color-rojo)]/10 bg-white/30 text-[var(--color-rojo)]/60 text-sm">
               <p>© 2026 Cozee™. All rights reserved.</p>
               <div className="flex gap-4 mt-4">
-                <a href="#" className="hover:text-[var(--color-rojo)] transition-colors">Instagram</a>
+                <a href="https://www.instagram.com/the.cozee" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-rojo)] transition-colors">Instagram</a>
                 <a href="#" className="hover:text-[var(--color-rojo)] transition-colors">TikTok</a>
                 <a href="#" className="hover:text-[var(--color-rojo)] transition-colors">Twitter</a>
               </div>

@@ -13,6 +13,7 @@ import { Home } from './pages/Home';
 import { Product } from './pages/Product';
 import { Checkout } from './pages/Checkout';
 import { Shop } from './pages/Shop';
+import { Contact } from './pages/Contact';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/shop" element={<Shop />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
 
