@@ -11,7 +11,7 @@ export function Checkout() {
   const { cart, clearCart } = useStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   // Form state
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -54,7 +54,7 @@ export function Checkout() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // 1. Load Razorpay script
     const res = await loadRazorpayScript();
     if (!res) {
@@ -90,8 +90,28 @@ export function Checkout() {
         name: "Cozee",
         description: "Purchase from Cozee Store",
         order_id: orderData.id,
-        handler: function (response: any) {
+        handler: async function (response: any) {
           // Payment successful
+          try {
+            await fetch('/api/confirm-order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email,
+                firstName,
+                lastName,
+                phone,
+                address,
+                city,
+                postalCode,
+                cartItems,
+                total
+              })
+            });
+          } catch (error) {
+            console.error("Order confirmation notification failed:", error);
+          }
+
           setIsSubmitting(false);
           setIsSuccess(true);
           clearCart();
@@ -136,8 +156,8 @@ export function Checkout() {
         <p className="text-xl text-[var(--color-rojo)]/70 mb-8 max-w-md">
           Thank you for your order. Your Cozee is getting packed and will be shipped shortly!
         </p>
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="px-8 py-4 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-medium text-lg hover:bg-[var(--color-rojo)]/90 transition-colors"
         >
           Return to Store
@@ -166,11 +186,11 @@ export function Checkout() {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-        
+
         {/* Left Column: Form */}
         <div className="lg:col-span-7 xl:col-span-8">
           <h1 className="text-4xl font-bold text-[var(--color-rojo)] mb-8 tracking-tight">Checkout</h1>
-          
+
           <form onSubmit={handleSubmit} className="space-y-10">
             {/* Contact Info */}
             <section>
@@ -214,7 +234,7 @@ export function Checkout() {
               </div>
             </section>
 
-            <button 
+            <button
               type="submit"
               disabled={isSubmitting}
               className="w-full py-5 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/90 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer shadow-xl shadow-[var(--color-rojo)]/20 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
@@ -225,7 +245,7 @@ export function Checkout() {
                 `Pay ${total} INR`
               )}
             </button>
-            
+
             <div className="flex items-center justify-center gap-2 text-sm text-[var(--color-rojo)]/60 mt-4">
               <ShieldCheck size={16} />
               <span>Payments are secure and encrypted.</span>
@@ -237,7 +257,7 @@ export function Checkout() {
         <div className="lg:col-span-5 xl:col-span-4">
           <div className="bg-white/40 rounded-3xl p-6 md:p-8 border border-[var(--color-rojo)]/10 sticky top-8">
             <h2 className="text-2xl font-bold text-[var(--color-rojo)] mb-6">Order Summary</h2>
-            
+
             <div className="space-y-4 mb-6 max-h-[40vh] overflow-y-auto pr-2">
               {cartItems.map((item) => (
                 <div key={item.productId} className="flex gap-4">
