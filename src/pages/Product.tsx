@@ -1,15 +1,17 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Check, Truck, ShieldCheck } from 'lucide-react';
 import { products } from '../data/products';
 import { useStore } from '../store/useStore';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
 
 export function Product() {
   const { id } = useParams();
   const { addToCart } = useStore();
-
   const product = products.find(p => p.id === Number(id));
+
+  const [activeImage, setActiveImage] = useState(product?.image || '');
 
   if (!product) {
     return (
@@ -23,6 +25,8 @@ export function Product() {
     );
   }
 
+  const allImages = product.images || [product.image];
+
   return (
     <main className="pb-20">
       <Link to="/" className="inline-flex items-center gap-2 text-[var(--color-rojo)]/70 hover:text-[var(--color-rojo)] transition-colors mb-8 group">
@@ -31,17 +35,43 @@ export function Product() {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-        {/* Product Image */}
-        <div className="relative aspect-[4/5] lg:aspect-square bg-transparent rounded-3xl border border-[#C11B17] overflow-hidden flex items-center justify-center p-8">
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            src={product.image}
-            alt={product.title}
-            className={`w-full h-full object-contain drop-shadow-2xl ${product.customPadding || ''}`}
-            referrerPolicy="no-referrer"
-          />
+        {/* Product Image Gallery */}
+        <div className="flex flex-col gap-6">
+          <div className="relative aspect-[4/5] lg:aspect-square bg-transparent rounded-[2.5rem] border border-[#C11B17] overflow-hidden flex items-center justify-center p-8 bg-white/50 backdrop-blur-sm">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={activeImage}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                src={activeImage}
+                alt={product.title}
+                className={`w-full h-full object-contain drop-shadow-2xl ${product.customPadding || ''}`}
+                referrerPolicy="no-referrer"
+              />
+            </AnimatePresence>
+          </div>
+
+          {/* Thumbnails */}
+          {allImages.length > 1 && (
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+              {allImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveImage(img)}
+                  className={`relative w-24 h-24 rounded-2xl border-2 transition-all overflow-hidden flex-shrink-0 bg-white/50 backdrop-blur-sm p-2 ${activeImage === img ? 'border-[var(--color-rojo)] scale-105 shadow-lg' : 'border-transparent hover:border-[var(--color-rojo)]/30'
+                    }`}
+                >
+                  <img
+                    src={img}
+                    alt={`${product.title} angle ${idx + 1}`}
+                    className="w-full h-full object-contain"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Product Details */}
