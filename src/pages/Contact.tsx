@@ -5,8 +5,15 @@ import { motion } from 'framer-motion';
 export function Contact() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, this would send an email or save to a database
-        alert('Thank you for your message! We will get back to you soon.');
+        const formData = new FormData(e.target as HTMLFormElement);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const message = formData.get('message');
+
+        const subject = encodeURIComponent(`New Inquiry from ${name} (via thecozee.in)`);
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+
+        window.location.href = `mailto:harsh@thecozee.in?subject=${subject}&body=${body}`;
     };
 
     return (
@@ -89,6 +96,7 @@ export function Contact() {
                         <div className="space-y-2">
                             <label className="text-sm font-bold uppercase tracking-widest text-[var(--color-rojo)]/60 px-1">Name</label>
                             <input
+                                name="name"
                                 type="text"
                                 required
                                 placeholder="Your name"
@@ -98,6 +106,7 @@ export function Contact() {
                         <div className="space-y-2">
                             <label className="text-sm font-bold uppercase tracking-widest text-[var(--color-rojo)]/60 px-1">Email</label>
                             <input
+                                name="email"
                                 type="email"
                                 required
                                 placeholder="your@email.com"
@@ -107,6 +116,7 @@ export function Contact() {
                         <div className="space-y-2">
                             <label className="text-sm font-bold uppercase tracking-widest text-[var(--color-rojo)]/60 px-1">Message</label>
                             <textarea
+                                name="message"
                                 required
                                 rows={4}
                                 placeholder="How can we help?"
