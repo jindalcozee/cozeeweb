@@ -9,14 +9,14 @@ import { Header } from './components/Header';
 import { CartDrawer } from './components/CartDrawer';
 import { MenuDrawer } from './components/MenuDrawer';
 import { ScrollToTop } from './components/ScrollToTop';
-import { Home } from './pages/Home';
-import { Product } from './pages/Product';
-import { Checkout } from './pages/Checkout';
-import { Shop } from './pages/Shop';
-import { Contact } from './pages/Contact';
-import { Login } from './pages/Login';
-import { Signup } from './pages/Signup';
-import { Account } from './pages/Account';
+import { Home } from '@/pages/Home';
+import { Product } from '@/pages/Product';
+import { Checkout } from '@/pages/Checkout';
+import { Shop } from '@/pages/Shop';
+import { Contact } from '@/pages/Contact';
+import { Login } from '@/pages/Login';
+import { Signup } from '@/pages/Signup';
+import { Account } from '@/pages/Account';
 
 export default function App() {
   return (
