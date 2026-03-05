@@ -4,10 +4,13 @@ import { products } from '../data/products';
 import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
+import { SizeGuide } from '../components/SizeGuide';
+import { useState } from 'react';
 
 export function Product() {
   const { id } = useParams();
   const { addToCart } = useStore();
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
   const product = products.find(p => p.id === Number(id));
 
@@ -74,7 +77,15 @@ export function Product() {
           <div className="space-y-4 mb-10">
             <div className="flex items-center gap-3 text-[var(--color-rojo)]/80">
               <Check size={20} className="text-[#C11B17]" />
-              <span className="text-lg">One size fits all (adults & teens)</span>
+              <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+                <span className="text-lg">One size fits all (adults & teens)</span>
+                <button
+                  onClick={() => setIsSizeGuideOpen(true)}
+                  className="text-sm font-black uppercase tracking-widest text-[var(--color-rojo)] border-b-2 border-[var(--color-rojo)]/30 hover:border-[var(--color-rojo)] transition-all cursor-pointer w-fit md:ml-2 italic"
+                >
+                  Size Guide
+                </button>
+              </div>
             </div>
             <div className="flex items-center gap-3 text-[var(--color-rojo)]/80">
               <Check size={20} className="text-[#C11B17]" />
@@ -109,6 +120,7 @@ export function Product() {
       </div>
 
       <FAQ />
+      <SizeGuide isOpen={isSizeGuideOpen} onClose={() => setIsSizeGuideOpen(false)} />
     </main>
   );
 }
