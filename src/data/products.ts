@@ -4,7 +4,8 @@ export const products = [
   {
     id: 1,
     title: 'Cozee™ Original - Navy',
-    price: '2500 INR',
+    price: '1999 INR',
+    originalPrice: '2999 INR',
     category: 'Originals',
     image: '/navyyy.png.PNG',
     bgColor: '#FFF5EB',
@@ -14,7 +15,8 @@ export const products = [
   {
     id: 2,
     title: 'Cozee™ Original - Grey',
-    price: '2500 INR',
+    price: '1999 INR',
+    originalPrice: '2999 INR',
     category: 'Originals',
     image: '/greyyy.png.PNG',
     bgColor: '#FFF5EB',
@@ -24,7 +26,8 @@ export const products = [
   {
     id: 3,
     title: 'Cozee™ Original - Black',
-    price: '2500 INR',
+    price: '1999 INR',
+    originalPrice: '2999 INR',
     category: 'Originals',
     image: '/blackyyy.png.PNG',
     bgColor: '#FFF5EB',
@@ -34,7 +37,8 @@ export const products = [
   {
     id: 4,
     title: 'Cozee™ Original - Pink',
-    price: '2500 INR',
+    price: '1999 INR',
+    originalPrice: '2999 INR',
     category: 'Originals',
     image: '/pinkyyy.png.PNG',
     bgColor: '#FFF5EB',

@@ -56,8 +56,15 @@ export function Product() {
             {product.title}
           </h1>
 
-          <div className="text-2xl md:text-3xl font-medium text-[var(--color-rojo)] mb-8">
-            {product.price}
+          <div className="flex items-baseline gap-4 mb-8">
+            <span className="text-3xl md:text-4xl font-bold text-[var(--color-rojo)]">
+              {product.price}
+            </span>
+            {product.originalPrice && (
+              <span className="text-xl md:text-2xl line-through opacity-40 font-normal text-[var(--color-rojo)]">
+                {product.originalPrice}
+              </span>
+            )}
           </div>
 
           <p className="text-lg md:text-xl text-[var(--color-rojo)]/80 leading-relaxed mb-10">

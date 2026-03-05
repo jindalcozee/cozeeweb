@@ -105,14 +105,14 @@ export function Home() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <div className="flex justify-between items-center text-lg md:text-xl font-medium">
-              <span>{product.title}</span>
-              {product.price && (
-                <div className="flex items-center gap-3">
-                  <span>{product.price}</span>
-                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-rojo)]/20"></div>
-                </div>
-              )}
+            <div className="flex justify-between items-start text-lg md:text-xl font-medium">
+              <span className="flex-1">{product.title}</span>
+              <div className="flex flex-col items-end gap-1">
+                {product.originalPrice && (
+                  <span className="text-sm md:text-base line-through opacity-40 font-normal">{product.originalPrice}</span>
+                )}
+                <span className="text-[var(--color-rojo)]">{product.price}</span>
+              </div>
             </div>
             <div className="text-sm md:text-base opacity-60 mt-1">{product.category}</div>
           </Link>
