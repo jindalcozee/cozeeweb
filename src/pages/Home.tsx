@@ -3,6 +3,8 @@ import { Search } from 'lucide-react';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { Hero3D } from '../components/Hero3D';
 import { FAQ } from '../components/FAQ';
+import { ScrollReveal } from '../components/ScrollReveal';
+import { Testimonials } from '../components/Testimonials';
 import { products, categories } from '../data/products';
 
 export function Home() {
@@ -49,9 +51,13 @@ export function Home() {
 
   return (
     <main>
-      <h1 className="text-[20vw] md:text-[14vw] font-bold leading-none mb-8 md:mb-16 tracking-tighter ml-[-0.05em]">Store</h1>
+      <ScrollReveal width="100%">
+        <h1 className="text-[20vw] md:text-[14vw] font-bold leading-none mb-8 md:mb-16 tracking-tighter ml-[-0.05em]">Store</h1>
+      </ScrollReveal>
 
-      <Hero3D />
+      <ScrollReveal width="100%" delay={0.4}>
+        <Hero3D />
+      </ScrollReveal>
 
       {/* Filters & Search */}
       <div className="flex justify-between items-center border-b border-[var(--color-rojo)]/20 pb-4 mb-4">
@@ -93,29 +99,31 @@ export function Home() {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16">
-        {filteredProducts.map((product) => (
-          <Link to={`/product/${product.id}`} key={product.id} className="group cursor-pointer flex flex-col">
-            <div
-              className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative border border-[#C11B17] bg-transparent"
-            >
-              <img
-                src={product.image}
-                alt={product.title}
-                className={`w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply ${product.contain ? `object-contain ${product.customPadding || 'p-4'}` : 'object-cover'}`}
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex justify-between items-start text-lg md:text-xl font-medium">
-              <span className="flex-1">{product.title}</span>
-              <div className="flex flex-col items-end gap-1">
-                {product.originalPrice && (
-                  <span className="text-sm md:text-base line-through opacity-40 font-normal">{product.originalPrice}</span>
-                )}
-                <span className="text-[var(--color-rojo)]">{product.price}</span>
+        {filteredProducts.map((product, idx) => (
+          <ScrollReveal key={product.id} width="100%" delay={idx % 2 * 0.1}>
+            <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
+              <div
+                className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative border border-[#C11B17] bg-transparent group-hover:shadow-2xl group-hover:shadow-[var(--color-rojo)]/10 transition-shadow duration-500"
+              >
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className={`w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply ${product.contain ? `object-contain ${product.customPadding || 'p-4'}` : 'object-cover'}`}
+                  referrerPolicy="no-referrer"
+                />
               </div>
-            </div>
-            <div className="text-sm md:text-base opacity-60 mt-1">{product.category}</div>
-          </Link>
+              <div className="flex justify-between items-start text-lg md:text-xl font-medium">
+                <span className="flex-1">{product.title}</span>
+                <div className="flex flex-col items-end gap-1">
+                  {product.originalPrice && (
+                    <span className="text-sm md:text-base line-through opacity-40 font-normal">{product.originalPrice}</span>
+                  )}
+                  <span className="text-[var(--color-rojo)]">{product.price}</span>
+                </div>
+              </div>
+              <div className="text-sm md:text-base opacity-60 mt-1">{product.category}</div>
+            </Link>
+          </ScrollReveal>
         ))}
 
         {filteredProducts.length === 0 && (
@@ -157,8 +165,12 @@ export function Home() {
       </section>
 
       <div id="faq">
-        <FAQ />
+        <ScrollReveal width="100%">
+          <FAQ />
+        </ScrollReveal>
       </div>
+
+      <Testimonials />
     </main>
   );
 }
