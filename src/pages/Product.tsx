@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check, Truck, ShieldCheck } from 'lucide-react';
 import { products } from '../data/products';
 import { useStore } from '../store/useStore';
@@ -9,10 +9,18 @@ import { useState } from 'react';
 
 export function Product() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { addToCart } = useStore();
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
   const product = products.find(p => p.id === Number(id));
+
+  const handleBuyNow = () => {
+    if (product) {
+      addToCart(product.id);
+      navigate('/checkout');
+    }
+  };
 
   if (!product) {
     return (
@@ -97,12 +105,20 @@ export function Product() {
             </div>
           </div>
 
-          <button
-            onClick={() => addToCart(product.id)}
-            className="w-full py-5 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl shadow-[var(--color-rojo)]/20"
-          >
-            Add to Cart
-          </button>
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => addToCart(product.id)}
+              className="w-full py-5 border-2 border-[var(--color-rojo)] text-[var(--color-rojo)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/5 transition-all cursor-pointer"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              className="w-full py-5 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl shadow-[var(--color-rojo)]/20"
+            >
+              Buy Now
+            </button>
+          </div>
 
           <div className="grid grid-cols-2 gap-6 mt-10 pt-10 border-t border-[var(--color-rojo)]/10">
             <div className="flex flex-col gap-2">
