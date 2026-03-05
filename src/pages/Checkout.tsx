@@ -4,6 +4,7 @@ import { ArrowLeft, CheckCircle, CreditCard, ShieldCheck, Truck } from 'lucide-r
 import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { products } from '../data/products';
+import { supabase } from '../lib/supabase';
 
 export function Checkout() {
   const navigate = useNavigate();
@@ -93,6 +94,7 @@ export function Checkout() {
         handler: async function (response: any) {
           // Payment successful
           try {
+            // 1. Send email notification
             await fetch('/api/confirm-order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -108,8 +110,20 @@ export function Checkout() {
                 total
               })
             });
+
+            // 2. Save to Supabase if user is logged in
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+              await supabase.from('orders').insert({
+                user_id: user.id,
+                total_amount: total,
+                status: 'paid',
+                items: cartItems,
+                razorpay_order_id: response.razorpay_order_id
+              });
+            }
           } catch (error) {
-            console.error("Order confirmation notification failed:", error);
+            console.error("Order processing failed:", error);
           }
 
           setIsSubmitting(false);

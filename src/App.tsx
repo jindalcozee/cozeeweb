@@ -14,6 +14,9 @@ import { Product } from './pages/Product';
 import { Checkout } from './pages/Checkout';
 import { Shop } from './pages/Shop';
 import { Contact } from './pages/Contact';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
+import { Account } from './pages/Account';
 
 export default function App() {
   return (
@@ -34,6 +37,9 @@ export default function App() {
             <Route path="/product/:id" element={<Product />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </div>
 
