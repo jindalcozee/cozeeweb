@@ -101,7 +101,7 @@ export function Home() {
               <img
                 src={product.image}
                 alt={product.title}
-                className={`w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply ${product.contain ? 'object-contain p-4' : 'object-cover'}`}
+                className={`w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply ${product.contain ? `object-contain ${product.customPadding || 'p-4'}` : 'object-cover'}`}
                 referrerPolicy="no-referrer"
               />
             </div>
