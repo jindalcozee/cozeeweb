@@ -133,12 +133,17 @@ export function Account() {
                                         </div>
                                         <div>
                                             <p className="text-xs uppercase font-bold opacity-40 mb-1">Status</p>
-                                            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold uppercase tracking-wider">
-                                                {order.status}
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${order.status === 'paid' ? 'bg-green-100 text-green-700' :
+                                                    order.status === 'pending_cod' ? 'bg-orange-100 text-orange-700' :
+                                                        'bg-gray-100 text-gray-700'
+                                                }`}>
+                                                {order.status === 'pending_cod' ? 'Cash on Delivery' : order.status}
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="text-xs uppercase font-bold opacity-40 mb-1">Total Paid</p>
+                                            <p className="text-xs uppercase font-bold opacity-40 mb-1">
+                                                {order.status === 'pending_cod' ? 'Total to Pay' : 'Total Paid'}
+                                            </p>
                                             <p className="text-[var(--color-rojo)] font-bold text-lg">{order.total_amount} INR</p>
                                         </div>
                                     </div>

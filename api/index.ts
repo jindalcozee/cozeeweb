@@ -42,7 +42,7 @@ app.post("/api/create-order", async (req, res) => {
 app.post("/api/confirm-order", async (req, res) => {
     try {
         const orderData = req.body;
-        const { email, firstName, lastName, phone, address, city, postalCode, cartItems, total } = orderData;
+        const { email, firstName, lastName, phone, address, city, postalCode, cartItems, total, paymentMethod } = orderData;
 
         // Use environment variables for SMTP configuration
         // Recommended: Use a service like Resend or Gmail App Password
@@ -67,10 +67,16 @@ app.post("/api/confirm-order", async (req, res) => {
         const mailOptions = {
             from: `"Cozee Store" <${process.env.EMAIL_USER}>`,
             to: 'harsh@thecozee.in',
-            subject: `New Order Received! - ${firstName} ${lastName}`,
+            subject: `New Order Received! (${paymentMethod === 'cod' ? 'COD' : 'Prepaid'}) - ${firstName} ${lastName}`,
             html: `
                 <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
                     <h1 style="color: #C11B17; text-align: center;">New Order from thecozee.in</h1>
+                    ${paymentMethod === 'cod' ? `
+                        <div style="background-color: #FFF5F5; border: 2px solid #C11B17; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                            <h2 style="color: #C11B17; margin: 0;">CASH ON DELIVERY ORDER</h2>
+                            <p style="font-size: 18px; margin: 10px 0 0 0;"><strong>COLLECT ₹${total} FROM CUSTOMER</strong></p>
+                        </div>
+                    ` : ''}
                     <p style="font-size: 16px;"><strong>Customer:</strong> ${firstName} ${lastName}</p>
                     <p style="font-size: 16px;"><strong>Email:</strong> ${email}</p>
                     <p style="font-size: 16px;"><strong>Phone:</strong> ${phone}</p>
@@ -92,7 +98,7 @@ app.post("/api/confirm-order", async (req, res) => {
                         </tbody>
                         <tfoot>
                             <tr style="background-color: #f8f8f8;">
-                                <td colspan="2" style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>Total Paid</strong></td>
+                                <td colspan="2" style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>${paymentMethod === 'cod' ? 'Total (Collect at Delivery)' : 'Total Paid'}</strong></td>
                                 <td style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>${total} INR</strong></td>
                             </tr>
                         </tfoot>

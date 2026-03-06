@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, CreditCard, ShieldCheck, Truck } from 'lucide-react';
+import { ArrowLeft, CheckCircle, CreditCard, ShieldCheck, Truck, Banknote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { products } from '../data/products';
@@ -12,6 +12,7 @@ export function Checkout() {
   const { cart, clearCart } = useStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'prepaid' | 'cod'>('prepaid');
 
   // Form state
   const [email, setEmail] = useState('');
@@ -40,7 +41,8 @@ export function Checkout() {
   }, 0);
 
   const shipping = 0;
-  const total = subtotal + shipping;
+  const codFee = paymentMethod === 'cod' ? 50 : 0;
+  const total = subtotal + shipping + codFee;
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -55,6 +57,49 @@ export function Checkout() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    if (paymentMethod === 'cod') {
+      try {
+        // 1. Send email notification
+        await fetch('/api/confirm-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            firstName,
+            lastName,
+            phone,
+            address,
+            city,
+            postalCode,
+            cartItems,
+            total,
+            paymentMethod: 'cod'
+          })
+        });
+
+        // 2. Save to Supabase if user is logged in
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from('orders').insert({
+            user_id: user.id,
+            total_amount: total,
+            status: 'pending_cod',
+            items: cartItems,
+            razorpay_order_id: 'COD'
+          });
+        }
+
+        setIsSubmitting(false);
+        setIsSuccess(true);
+        clearCart();
+      } catch (error) {
+        console.error("COD Order processing failed:", error);
+        alert("Something went wrong. Please try again.");
+        setIsSubmitting(false);
+      }
+      return;
+    }
 
     // 1. Load Razorpay script
     const res = await loadRazorpayScript();
@@ -107,7 +152,8 @@ export function Checkout() {
                 city,
                 postalCode,
                 cartItems,
-                total
+                total,
+                paymentMethod: 'prepaid'
               })
             });
 
@@ -248,6 +294,46 @@ export function Checkout() {
               </div>
             </section>
 
+            {/* Payment Method */}
+            <section>
+              <h2 className="text-2xl font-medium text-[var(--color-rojo)] mb-4">Payment Method</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('prepaid')}
+                  className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left group ${paymentMethod === 'prepaid'
+                      ? 'border-[var(--color-rojo)] bg-[var(--color-rojo)]/5'
+                      : 'border-[var(--color-rojo)]/10 bg-white/50 hover:border-[var(--color-rojo)]/30'
+                    }`}
+                >
+                  <div className={`p-4 rounded-xl transition-colors ${paymentMethod === 'prepaid' ? 'bg-[var(--color-rojo)] text-[var(--color-crema)]' : 'bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] group-hover:bg-[var(--color-rojo)]/20'}`}>
+                    <CreditCard size={28} />
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg text-[var(--color-rojo)]">Prepaid</div>
+                    <div className="text-sm text-[var(--color-rojo)]/60">Pay online via Razorpay</div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('cod')}
+                  className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left group ${paymentMethod === 'cod'
+                      ? 'border-[var(--color-rojo)] bg-[var(--color-rojo)]/5'
+                      : 'border-[var(--color-rojo)]/10 bg-white/50 hover:border-[var(--color-rojo)]/30'
+                    }`}
+                >
+                  <div className={`p-4 rounded-xl transition-colors ${paymentMethod === 'cod' ? 'bg-[var(--color-rojo)] text-[var(--color-crema)]' : 'bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] group-hover:bg-[var(--color-rojo)]/20'}`}>
+                    <Banknote size={28} />
+                  </div>
+                  <div>
+                    <div className="font-bold text-lg text-[var(--color-rojo)]">Cash on Delivery</div>
+                    <div className="text-sm text-[var(--color-rojo)]/60">₹50 handling fee applies</div>
+                  </div>
+                </button>
+              </div>
+            </section>
+
             <button
               type="submit"
               disabled={isSubmitting}
@@ -256,7 +342,7 @@ export function Checkout() {
               {isSubmitting ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                `Pay ${total} INR`
+                paymentMethod === 'cod' ? `Confirm Order (${total} INR)` : `Pay ${total} INR`
               )}
             </button>
 
@@ -296,6 +382,12 @@ export function Checkout() {
                 <span className="flex items-center gap-2">Shipping <Truck size={14} /></span>
                 <span>{shipping === 0 ? 'Free' : `${shipping} INR`}</span>
               </div>
+              {paymentMethod === 'cod' && (
+                <div className="flex justify-between text-[var(--color-rojo)]/80">
+                  <span>COD Handling Fee</span>
+                  <span>{codFee} INR</span>
+                </div>
+              )}
               <div className="border-t border-[var(--color-rojo)]/10 pt-3 mt-3 flex justify-between text-xl font-bold text-[var(--color-rojo)]">
                 <span>Total</span>
                 <span>{total} INR</span>
