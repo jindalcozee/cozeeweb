@@ -13,6 +13,9 @@ export function Checkout() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'prepaid' | 'cod'>('prepaid');
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string, discount: number, type: 'percent' | 'fixed' } | null>(null);
+  const [couponError, setCouponError] = useState('');
 
   // Form state
   const [email, setEmail] = useState('');
@@ -42,7 +45,35 @@ export function Checkout() {
 
   const shipping = 0;
   const codFee = paymentMethod === 'cod' ? 50 : 0;
-  const total = subtotal + shipping + codFee;
+
+  let discount = 0;
+  if (appliedCoupon) {
+    if (appliedCoupon.type === 'percent') {
+      discount = Math.round(subtotal * (appliedCoupon.discount / 100));
+    } else {
+      discount = appliedCoupon.discount;
+    }
+  }
+
+  const total = subtotal + shipping + codFee - discount;
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCouponError('');
+    const code = couponInput.trim().toUpperCase();
+
+    // Simple coupon logic
+    if (code === 'WELCOME10') {
+      setAppliedCoupon({ code, discount: 10, type: 'percent' });
+    } else if (code === 'COZEE200') {
+      setAppliedCoupon({ code, discount: 200, type: 'fixed' });
+    } else if (code === 'FIRSTBUY') {
+      setAppliedCoupon({ code, discount: 15, type: 'percent' });
+    } else {
+      setCouponError('Invalid coupon code');
+      setAppliedCoupon(null);
+    }
+  };
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -74,7 +105,9 @@ export function Checkout() {
             postalCode,
             cartItems,
             total,
-            paymentMethod: 'cod'
+            paymentMethod: 'cod',
+            discount,
+            couponCode: appliedCoupon?.code
           })
         });
 
@@ -86,7 +119,9 @@ export function Checkout() {
             total_amount: total,
             status: 'pending_cod',
             items: cartItems,
-            razorpay_order_id: 'COD'
+            razorpay_order_id: 'COD',
+            discount_amount: discount,
+            coupon_code: appliedCoupon?.code
           });
         }
 
@@ -153,7 +188,9 @@ export function Checkout() {
                 postalCode,
                 cartItems,
                 total,
-                paymentMethod: 'prepaid'
+                paymentMethod: 'prepaid',
+                discount,
+                couponCode: appliedCoupon?.code
               })
             });
 
@@ -165,7 +202,9 @@ export function Checkout() {
                 total_amount: total,
                 status: 'paid',
                 items: cartItems,
-                razorpay_order_id: response.razorpay_order_id
+                razorpay_order_id: response.razorpay_order_id,
+                discount_amount: discount,
+                coupon_code: appliedCoupon?.code
               });
             }
           } catch (error) {
@@ -302,8 +341,8 @@ export function Checkout() {
                   type="button"
                   onClick={() => setPaymentMethod('prepaid')}
                   className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left group ${paymentMethod === 'prepaid'
-                      ? 'border-[var(--color-rojo)] bg-[var(--color-rojo)]/5'
-                      : 'border-[var(--color-rojo)]/10 bg-white/50 hover:border-[var(--color-rojo)]/30'
+                    ? 'border-[var(--color-rojo)] bg-[var(--color-rojo)]/5'
+                    : 'border-[var(--color-rojo)]/10 bg-white/50 hover:border-[var(--color-rojo)]/30'
                     }`}
                 >
                   <div className={`p-4 rounded-xl transition-colors ${paymentMethod === 'prepaid' ? 'bg-[var(--color-rojo)] text-[var(--color-crema)]' : 'bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] group-hover:bg-[var(--color-rojo)]/20'}`}>
@@ -319,8 +358,8 @@ export function Checkout() {
                   type="button"
                   onClick={() => setPaymentMethod('cod')}
                   className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left group ${paymentMethod === 'cod'
-                      ? 'border-[var(--color-rojo)] bg-[var(--color-rojo)]/5'
-                      : 'border-[var(--color-rojo)]/10 bg-white/50 hover:border-[var(--color-rojo)]/30'
+                    ? 'border-[var(--color-rojo)] bg-[var(--color-rojo)]/5'
+                    : 'border-[var(--color-rojo)]/10 bg-white/50 hover:border-[var(--color-rojo)]/30'
                     }`}
                 >
                   <div className={`p-4 rounded-xl transition-colors ${paymentMethod === 'cod' ? 'bg-[var(--color-rojo)] text-[var(--color-crema)]' : 'bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] group-hover:bg-[var(--color-rojo)]/20'}`}>
@@ -388,10 +427,40 @@ export function Checkout() {
                   <span>{codFee} INR</span>
                 </div>
               )}
+              {appliedCoupon && (
+                <div className="flex justify-between text-green-600 font-medium">
+                  <span>Discount ({appliedCoupon.code})</span>
+                  <span>-{discount} INR</span>
+                </div>
+              )}
               <div className="border-t border-[var(--color-rojo)]/10 pt-3 mt-3 flex justify-between text-xl font-bold text-[var(--color-rojo)]">
                 <span>Total</span>
                 <span>{total} INR</span>
               </div>
+            </div>
+
+            {/* Coupon Section */}
+            <div className="mt-8 pt-6 border-t border-[var(--color-rojo)]/10">
+              <form onSubmit={handleApplyCoupon} className="space-y-3">
+                <label className="text-sm font-medium text-[var(--color-rojo)]/70 block px-1">Have a discount code?</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponInput}
+                    onChange={(e) => setCouponInput(e.target.value)}
+                    placeholder="Enter code"
+                    className="flex-1 px-4 py-2 rounded-xl border border-[var(--color-rojo)]/20 bg-white/50 focus:outline-none focus:border-[var(--color-rojo)] text-sm"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[var(--color-rojo)] text-white rounded-xl text-sm font-bold hover:bg-[var(--color-rojo)]/90 transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponError && <p className="text-xs text-red-500 font-medium px-1">{couponError}</p>}
+                {appliedCoupon && <p className="text-xs text-green-600 font-bold px-1">Coupon "{appliedCoupon.code}" applied!</p>}
+              </form>
             </div>
           </div>
         </div>

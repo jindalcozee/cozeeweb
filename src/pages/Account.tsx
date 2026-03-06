@@ -134,17 +134,25 @@ export function Account() {
                                         <div>
                                             <p className="text-xs uppercase font-bold opacity-40 mb-1">Status</p>
                                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${order.status === 'paid' ? 'bg-green-100 text-green-700' :
-                                                    order.status === 'pending_cod' ? 'bg-orange-100 text-orange-700' :
-                                                        'bg-gray-100 text-gray-700'
+                                                order.status === 'pending_cod' ? 'bg-orange-100 text-orange-700' :
+                                                    'bg-gray-100 text-gray-700'
                                                 }`}>
                                                 {order.status === 'pending_cod' ? 'Cash on Delivery' : order.status}
                                             </span>
                                         </div>
                                         <div>
                                             <p className="text-xs uppercase font-bold opacity-40 mb-1">
-                                                {order.status === 'pending_cod' ? 'Total to Pay' : 'Total Paid'}
+                                                {order.status === 'pending_cod' ? 'Total to Pay' : 'Total'}
                                             </p>
-                                            <p className="text-[var(--color-rojo)] font-bold text-lg">{order.total_amount} INR</p>
+                                            <p className="text-[var(--color-rojo)] font-bold text-lg">
+                                                {order.total_amount} INR
+                                                {order.discount_amount > 0 && (
+                                                    <span className="block text-xs text-green-600 font-medium">
+                                                        Saved {order.discount_amount} INR
+                                                        {order.coupon_code && ` (${order.coupon_code})`}
+                                                    </span>
+                                                )}
+                                            </p>
                                         </div>
                                     </div>
 

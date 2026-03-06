@@ -42,7 +42,10 @@ app.post("/api/create-order", async (req, res) => {
 app.post("/api/confirm-order", async (req, res) => {
     try {
         const orderData = req.body;
-        const { email, firstName, lastName, phone, address, city, postalCode, cartItems, total, paymentMethod } = orderData;
+        const {
+            email, firstName, lastName, phone, address, city, postalCode,
+            cartItems, total, paymentMethod, discount, couponCode
+        } = orderData;
 
         // Use environment variables for SMTP configuration
         // Recommended: Use a service like Resend or Gmail App Password
@@ -98,7 +101,7 @@ app.post("/api/confirm-order", async (req, res) => {
                         </tbody>
                         <tfoot>
                             <tr style="background-color: #f8f8f8;">
-                                <td colspan="2" style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>${paymentMethod === 'cod' ? 'Total (Collect at Delivery)' : 'Total Paid'}</strong></td>
+                                <td colspan="2" style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>${paymentMethod === 'cod' ? 'Total (Collect at Delivery)' : 'Total Paid'}</strong>${couponCode ? `<br/><span style="font-size: 12px; color: #666;">Coupon: ${couponCode} (-₹${discount})</span>` : ''}</td>
                                 <td style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>${total} INR</strong></td>
                             </tr>
                         </tfoot>
