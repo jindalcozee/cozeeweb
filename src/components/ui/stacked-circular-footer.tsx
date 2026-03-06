@@ -11,21 +11,20 @@ function StackedCircularFooter() {
           <div className="mb-8 rounded-full bg-[var(--color-rojo)]/10 p-8 text-[var(--color-rojo)]">
             <Cloud className="w-8 h-8" strokeWidth={1.5} />
           </div>
-          <nav className="mb-8 flex flex-wrap justify-center gap-6 font-medium">
-            <a href="/" className="hover:opacity-70 transition-opacity">Home</a>
-            <a href="/#about" className="hover:opacity-70 transition-opacity">About</a>
-            <a href="/shop?category=All" className="hover:opacity-70 transition-opacity">Shop</a>
-            <a href="/contact" className="hover:opacity-70 transition-opacity">Contact</a>
+          <nav className="mb-8 flex flex-wrap justify-center items-center gap-6 font-medium">
+            <a href="/" className="hover:opacity-70 transition-opacity whitespace-nowrap">Home</a>
+            <a href="/#about" className="hover:opacity-70 transition-opacity whitespace-nowrap">About</a>
+            <div className="mx-2">
+              <Button asChild variant="outline" size="icon" className="rounded-full border-[var(--color-rojo)] text-[var(--color-rojo)] hover:bg-[var(--color-rojo)] hover:text-[var(--color-crema)] bg-transparent w-10 h-10">
+                <a href="https://instagram.com/the.cozee" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="h-5 w-5" />
+                  <span className="sr-only">Instagram</span>
+                </a>
+              </Button>
+            </div>
+            <a href="/shop?category=All" className="hover:opacity-70 transition-opacity whitespace-nowrap">Shop</a>
+            <a href="/contact" className="hover:opacity-70 transition-opacity whitespace-nowrap">Contact</a>
           </nav>
-
-          <div className="mb-8">
-            <Button asChild variant="outline" size="icon" className="rounded-full border-[var(--color-rojo)] text-[var(--color-rojo)] hover:bg-[var(--color-rojo)] hover:text-[var(--color-crema)] bg-transparent">
-              <a href="https://instagram.com/the.cozee" target="_blank" rel="noopener noreferrer">
-                <Instagram className="h-4 w-4" />
-                <span className="sr-only">Instagram</span>
-              </a>
-            </Button>
-          </div>
 
           <div className="mb-8 w-full max-w-md">
             <form className="flex space-x-2">
