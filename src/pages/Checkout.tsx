@@ -63,12 +63,8 @@ export function Checkout() {
     const code = couponInput.trim().toUpperCase();
 
     // Simple coupon logic
-    if (code === 'WELCOME10') {
+    if (code === 'COZEE10') {
       setAppliedCoupon({ code, discount: 10, type: 'percent' });
-    } else if (code === 'COZEE200') {
-      setAppliedCoupon({ code, discount: 200, type: 'fixed' });
-    } else if (code === 'FIRSTBUY') {
-      setAppliedCoupon({ code, discount: 15, type: 'percent' });
     } else {
       setCouponError('Invalid coupon code');
       setAppliedCoupon(null);
