@@ -154,7 +154,7 @@ export function Home() {
           </div>
           <div className="relative aspect-[4/5] bg-[#FDF5E6] rounded-3xl overflow-hidden group">
             <img
-              src="/cozeeab.png.png"
+              src="/about-lifestyle.png"
               alt="Premium Winter Wear"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
               referrerPolicy="no-referrer"
