@@ -66,8 +66,6 @@ export function MenuDrawer() {
               <p>© 2026 Cozee™. All rights reserved.</p>
               <div className="flex gap-4 mt-4">
                 <a href="https://www.instagram.com/the.cozee" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-rojo)] transition-colors">Instagram</a>
-                <a href="#" className="hover:text-[var(--color-rojo)] transition-colors">TikTok</a>
-                <a href="#" className="hover:text-[var(--color-rojo)] transition-colors">Twitter</a>
               </div>
             </div>
           </motion.div>
