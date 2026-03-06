@@ -454,6 +454,21 @@ export function Checkout() {
                     Apply
                   </button>
                 </div>
+                {!appliedCoupon && !couponError && (
+                  <div className="px-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCouponInput('COZEE10');
+                        setAppliedCoupon({ code: 'COZEE10', discount: 10, type: 'percent' });
+                        setCouponError('');
+                      }}
+                      className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-rojo)]/60 bg-[var(--color-rojo)]/5 px-2 py-1 rounded-md border border-[var(--color-rojo)]/10 hover:bg-[var(--color-rojo)]/10 hover:text-[var(--color-rojo)] transition-all"
+                    >
+                      Click to apply: COZEE10
+                    </button>
+                  </div>
+                )}
                 {couponError && <p className="text-xs text-red-500 font-medium px-1">{couponError}</p>}
                 {appliedCoupon && <p className="text-xs text-green-600 font-bold px-1">Coupon "{appliedCoupon.code}" applied!</p>}
               </form>
