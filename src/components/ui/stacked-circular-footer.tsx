@@ -8,8 +8,8 @@ function StackedCircularFooter() {
     <footer className="bg-[var(--color-crema)] py-12 border-t border-[var(--color-rojo)]/20 mt-20 text-[var(--color-rojo)]">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center">
-          <div className="mb-8 rounded-full bg-[var(--color-rojo)]/10 p-8 text-[var(--color-rojo)]">
-            <Cloud className="w-8 h-8" strokeWidth={1.5} />
+          <div className="mb-8 rounded-full bg-[var(--color-rojo)]/10 p-6 text-[var(--color-rojo)]">
+            <span className="text-2xl font-black tracking-tighter font-logo">COZEE</span>
           </div>
           <nav className="mb-8 flex flex-wrap justify-center items-center gap-6 font-medium">
             <a href="/" className="hover:opacity-70 transition-opacity whitespace-nowrap">Home</a>
