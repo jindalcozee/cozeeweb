@@ -63,7 +63,7 @@ export function MenuDrawer() {
             </nav>
 
             <div className="p-8 border-t border-[var(--color-rojo)]/10 bg-white/30 text-[var(--color-rojo)]/60 text-sm">
-              <p>© 2025 Cozee™. All rights reserved.</p>
+              <p>© 2025 The Cozee™. All rights reserved.</p>
               <div className="flex gap-4 mt-4">
                 <a href="https://www.instagram.com/the.cozee" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-rojo)] transition-colors">Instagram</a>
               </div>

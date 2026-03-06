@@ -44,7 +44,7 @@ function StackedCircularFooter() {
           </div>
           <div className="text-center">
             <p className="text-sm opacity-60">
-              © 2025 Cozee™. All rights reserved.
+              © 2025 The Cozee™. All rights reserved.
             </p>
           </div>
         </div>
