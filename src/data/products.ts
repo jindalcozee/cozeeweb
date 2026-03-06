@@ -37,8 +37,8 @@ export const products = [
   {
     id: 4,
     title: 'Cozee™ Original - Pink',
-    price: '1999 INR',
-    originalPrice: '2999 INR',
+    price: '2199 INR',
+    originalPrice: '3499 INR',
     category: 'Originals',
     image: '/pinkyyy.png.PNG',
     bgColor: '#FFF5EB',
