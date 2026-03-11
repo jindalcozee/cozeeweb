@@ -1,8 +1,8 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check, Truck, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Check, Truck, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import { products } from '../data/products';
 import { useStore } from '../store/useStore';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
 import { SizeGuide } from '../components/SizeGuide';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ export function Product() {
   const navigate = useNavigate();
   const { addToCart } = useStore();
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const product = products.find(p => p.id === Number(id));
 
@@ -34,6 +35,8 @@ export function Product() {
     );
   }
 
+  const allImages = (product as any).images ? (product as any).images : [product.image];
+
   return (
     <main className="pb-20">
       <Link to="/" className="inline-flex items-center gap-2 text-[var(--color-rojo)]/70 hover:text-[var(--color-rojo)] transition-colors mb-8 group">
@@ -42,17 +45,51 @@ export function Product() {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-        {/* Product Image */}
+        {/* Product Image Gallery */}
         <div className="relative aspect-[4/5] lg:aspect-square bg-transparent rounded-3xl border border-[#C11B17] overflow-hidden flex items-center justify-center p-8">
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            src={product.image}
-            alt={product.title}
-            className={`w-full h-full object-contain drop-shadow-2xl ${product.customPadding || ''}`}
-            referrerPolicy="no-referrer"
-          />
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={currentImageIndex}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.25 }}
+              src={allImages[currentImageIndex]}
+              alt={product.title}
+              className={`w-full h-full object-contain drop-shadow-2xl ${(product as any).customPadding || ''}`}
+              referrerPolicy="no-referrer"
+            />
+          </AnimatePresence>
+
+          {allImages.length > 1 && (
+            <>
+              {/* Left Arrow */}
+              <button
+                onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 border border-[var(--color-rojo)]/10 flex items-center justify-center text-[var(--color-rojo)] hover:bg-white transition-colors shadow-md cursor-pointer"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              {/* Right Arrow */}
+              <button
+                onClick={() => setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1))}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 border border-[var(--color-rojo)]/10 flex items-center justify-center text-[var(--color-rojo)] hover:bg-white transition-colors shadow-md cursor-pointer"
+              >
+                <ChevronRight size={20} />
+              </button>
+              {/* Dots */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {allImages.map((_: string, i: number) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentImageIndex(i)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${i === currentImageIndex ? 'bg-[var(--color-rojo)] scale-110' : 'bg-[var(--color-rojo)]/25 hover:bg-[var(--color-rojo)]/50'
+                      }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Product Details */}
