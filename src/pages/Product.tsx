@@ -46,7 +46,7 @@ export function Product() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         {/* Product Image Gallery */}
-        <div className="relative aspect-[4/5] lg:aspect-square bg-[var(--color-crema)] rounded-3xl border border-[#C11B17] overflow-hidden flex items-center justify-center p-8">
+        <div className="relative aspect-[4/5] lg:aspect-square bg-transparent overflow-hidden flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.img
               key={currentImageIndex}

@@ -103,7 +103,7 @@ export function Home() {
           <ScrollReveal key={product.id} width="100%" delay={idx % 2 * 0.1}>
             <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
               <div
-                className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative border border-[#C11B17] bg-[var(--color-crema)] group-hover:shadow-2xl group-hover:shadow-[var(--color-rojo)]/10 transition-shadow duration-500"
+                className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative bg-transparent group-hover:shadow-2xl transition-shadow duration-500"
               >
                 <img
                   src={product.image}

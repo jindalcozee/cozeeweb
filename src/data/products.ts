@@ -11,6 +11,7 @@ export const products = [
     images: ['/navyyy.png.PNG', '/blue.png'],
     bgColor: '#FFF5EB',
     contain: true,
+    customPadding: 'scale-125 md:scale-150',
     description: 'The original Cozee wearable blanket in a deep, rich navy blue. Made with ultra-soft flannel fleece on the outside and warm sherpa fleece on the inside. Perfect for those chilly evenings.',
   },
   {
@@ -23,7 +24,6 @@ export const products = [
     images: ['/grey-1.png', '/grey-2.png'],
     bgColor: '#FFF5EB',
     contain: true,
-    customPadding: 'p-16 md:p-24',
     description: 'Stay neutral and cozee with our Grey edition. Featuring the same premium dual-layer construction, this versatile color matches any lounging aesthetic.',
   },
   {
@@ -36,6 +36,7 @@ export const products = [
     images: ['/blackyyy.png.PNG', '/black.png'],
     bgColor: '#FFF5EB',
     contain: true,
+    customPadding: 'scale-125 md:scale-150',
     description: 'Sleek, stylish, and incredibly warm. The Black Cozee features a dark exterior that hides stains while keeping you wrapped in pure sherpa comfort.',
   },
   {
@@ -48,7 +49,7 @@ export const products = [
     images: ['/pinkyyy.png.PNG', '/pink.png'],
     bgColor: '#FFF5EB',
     contain: true,
-    customPadding: 'p-10',
+    customPadding: 'scale-125 md:scale-150',
     description: 'Add a pop of color to your comfort with the Pink Cozee. Super soft, super warm, and perfectly vibrant for your cozy nights in.',
   },
 ];
