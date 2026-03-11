@@ -23,7 +23,7 @@ export const products = [
     images: ['/grey-1.png', '/grey-2.png'],
     bgColor: '#FFF5EB',
     contain: true,
-    customPadding: 'p-12 md:p-16',
+    customPadding: 'p-16 md:p-24',
     description: 'Stay neutral and cozee with our Grey edition. Featuring the same premium dual-layer construction, this versatile color matches any lounging aesthetic.',
   },
   {
