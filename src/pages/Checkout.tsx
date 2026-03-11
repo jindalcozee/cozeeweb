@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, CreditCard, ShieldCheck, Truck, Banknote } from 'lucide-react';
+import { ArrowLeft, CheckCircle, CreditCard, ShieldCheck, Shield, Truck, Banknote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { products } from '../data/products';
@@ -16,6 +16,7 @@ export function Checkout() {
   const [couponInput, setCouponInput] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string, discount: number, type: 'percent' | 'fixed' } | null>(null);
   const [couponError, setCouponError] = useState('');
+  const [shippingProtection, setShippingProtection] = useState(true);
 
   // Form state
   const [email, setEmail] = useState('');
@@ -45,6 +46,7 @@ export function Checkout() {
 
   const shipping = 0;
   const codFee = paymentMethod === 'cod' ? 50 : 0;
+  const shippingProtectionFee = shippingProtection ? 99 : 0;
 
   let discount = 0;
   if (appliedCoupon) {
@@ -55,7 +57,7 @@ export function Checkout() {
     }
   }
 
-  const total = subtotal + shipping + codFee - discount;
+  const total = subtotal + shipping + codFee + shippingProtectionFee - discount;
 
   const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault();
@@ -429,6 +431,29 @@ export function Checkout() {
                   <span>-{discount} INR</span>
                 </div>
               )}
+
+              {/* Shipping Protection */}
+              <div className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${shippingProtection
+                  ? 'border-[var(--color-rojo)]/30 bg-[var(--color-rojo)]/5'
+                  : 'border-[var(--color-rojo)]/10 bg-white/30'
+                }`} onClick={() => setShippingProtection(!shippingProtection)}>
+                <div className="flex items-center gap-2">
+                  <Shield size={16} className={shippingProtection ? 'text-[var(--color-rojo)]' : 'text-[var(--color-rojo)]/40'} />
+                  <div>
+                    <span className="text-sm font-medium text-[var(--color-rojo)]">Shipping Protection</span>
+                    <p className="text-[10px] text-[var(--color-rojo)]/50 leading-tight">Covers lost, damaged or stolen packages</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-[var(--color-rojo)]">{shippingProtection ? '99 INR' : ''}</span>
+                  <div className={`w-9 h-5 rounded-full transition-colors relative ${shippingProtection ? 'bg-[var(--color-rojo)]' : 'bg-[var(--color-rojo)]/20'
+                    }`}>
+                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${shippingProtection ? 'translate-x-4' : 'translate-x-0.5'
+                      }`} />
+                  </div>
+                </div>
+              </div>
+
               <div className="border-t border-[var(--color-rojo)]/10 pt-3 mt-3 flex justify-between text-xl font-bold text-[var(--color-rojo)]">
                 <span>Total</span>
                 <span>{total} INR</span>
