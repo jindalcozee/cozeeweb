@@ -98,17 +98,17 @@ export function Home() {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12 md:gap-y-16">
         {filteredProducts.map((product, idx) => (
-          <ScrollReveal key={product.id} width="100%" delay={idx % 2 * 0.1}>
+          <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
             <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
               <div
-                className="aspect-[4/5] overflow-hidden mb-4 rounded-3xl relative bg-transparent group-hover:shadow-2xl transition-shadow duration-500"
+                className="aspect-square overflow-hidden mb-4 rounded-3xl relative bg-transparent group-hover:shadow-2xl transition-shadow duration-500"
               >
                 <img
                   src={product.image}
                   alt={product.title}
-                  className={`w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply ${product.contain ? `object-contain ${product.customPadding || 'p-4'}` : 'object-cover'}`}
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply object-contain p-4"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -156,7 +156,7 @@ export function Home() {
             <img
               src="/about-lifestyle.png"
               alt="Premium Winter Wear"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+              className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 border border-[var(--color-rojo)]/10 m-4 rounded-3xl pointer-events-none"></div>

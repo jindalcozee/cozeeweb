@@ -57,8 +57,8 @@ export function CartDrawer() {
               ) : (
                 cartItems.map((item) => (
                   <div key={item.productId} className="flex gap-4 bg-white/50 p-4 rounded-2xl border border-[var(--color-rojo)]/10">
-                    <div className="w-24 h-24 bg-[#FFF5EB] rounded-xl border border-[#C11B17] overflow-hidden flex-shrink-0">
-                      <img src={item.product.image} alt={item.product.title} className="w-full h-full object-contain p-2 mix-blend-multiply" />
+                    <div className="w-20 h-20 bg-transparent rounded-xl border border-[#C11B17] overflow-hidden flex-shrink-0">
+                      <img src={item.product.image} alt={item.product.title} className="w-full h-full object-contain mix-blend-multiply p-1" />
                     </div>
                     <div className="flex-1 flex flex-col justify-between">
                       <div className="flex justify-between items-start">
