@@ -1,5 +1,39 @@
 Add-Type -AssemblyName System.Drawing
 
+function Resize-Image {
+    param(
+        [System.Drawing.Bitmap]$img,
+        [int]$targetWidth,
+        [int]$targetHeight
+    )
+    
+    $newImg = New-Object System.Drawing.Bitmap $targetWidth, $targetHeight
+    $g = [System.Drawing.Graphics]::FromImage($newImg)
+    $g.Clear([System.Drawing.Color]::Transparent)
+    $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+    
+    # Calculate scaling factor to fit the image while maintaining aspect ratio
+    $ratioX = $targetWidth / $img.Width
+    $ratioY = $targetHeight / $img.Height
+    $ratio = [Math]::Min($ratioX, $ratioY)
+    
+    # Scale down slightly to leave a small margin if it hits the edges
+    $scale = 0.95
+    $ratio = $ratio * $scale
+
+    $newWidth = [int]($img.Width * $ratio)
+    $newHeight = [int]($img.Height * $ratio)
+    
+    # Calculate centering
+    $posX = [int](($targetWidth - $newWidth) / 2)
+    $posY = [int](($targetHeight - $newHeight) / 2)
+    
+    $g.DrawImage($img, $posX, $posY, $newWidth, $newHeight)
+    $g.Dispose()
+    
+    return $newImg
+}
+
 function Flood-Fill-Transparency {
     param(
         [string]$ImagePath,
@@ -88,10 +122,15 @@ function Flood-Fill-Transparency {
         }
     }
     
-    # Save to a temporary file first to avoid issues saving back to the same file while open
-    $tempPath = [System.IO.Path]::GetTempFileName() + ".png"
-    $img.Save($tempPath, [System.Drawing.Imaging.ImageFormat]::Png)
+    # NEW: Resize and Pad to 848x1264
+    Write-Host "Resizing to 848x1264..."
+    $resizedImg = Resize-Image $img 848 1264
     $img.Dispose()
+    
+    # Save to a temporary file first
+    $tempPath = [System.IO.Path]::GetTempFileName() + ".png"
+    $resizedImg.Save($tempPath, [System.Drawing.Imaging.ImageFormat]::Png)
+    $resizedImg.Dispose()
     
     # Copy back to original location
     Move-Item -Path $tempPath -Destination $OutputPath -Force
