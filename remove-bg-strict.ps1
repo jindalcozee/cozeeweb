@@ -1,70 +1,111 @@
-Add-Type -TypeDefinition @"
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+Add-Type -AssemblyName System.Drawing
 
-public class ImageProcessor {
-    public static void RemoveWhiteBackground(string inputPath) {
-        if (!File.Exists(inputPath)) {
-            Console.WriteLine("File not found: " + inputPath);
-            return;
-        }
+function Flood-Fill-Transparency {
+    param(
+        [string]$ImagePath,
+        [string]$OutputPath
+    )
+    
+    if (!(Test-Path $ImagePath)) {
+        Write-Warning "File not found: $ImagePath"
+        return
+    }
 
-        Bitmap bmp = new Bitmap(inputPath);
-        Bitmap clone = new Bitmap(bmp.Width, bmp.Height, PixelFormat.Format32bppArgb);
-        
-        using (Graphics gr = Graphics.FromImage(clone)) {
-            gr.DrawImage(bmp, new Rectangle(0, 0, clone.Width, clone.Height));
-        }
-        bmp.Dispose();
-        
-        BitmapData bmpData = clone.LockBits(new Rectangle(0, 0, clone.Width, clone.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-        
-        int bytes = Math.Abs(bmpData.Stride) * clone.Height;
-        byte[] rgbValues = new byte[bytes];
-        
-        System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, rgbValues, 0, bytes);
-        
-        for (int i = 0; i < rgbValues.Length; i += 4) {
-            byte b = rgbValues[i];
-            byte g = rgbValues[i+1];
-            byte r = rgbValues[i+2];
-            
-            // Background is close to white e.g. RGB(242, 240, 235), so use a wider threshold.
-            // Be more aggressive.
-            if (r >= 230 && g >= 230 && b >= 230) {
-                // If it is fairly light, check if it's kinda gray/white
-                int max = Math.Max(Math.Max(r, g), b);
-                int min = Math.Min(Math.Min(r, g), b);
-                
-                // Low saturation indicates white/gray color, not a bright colored part
-                if (max - min < 20) {
-                    rgbValues[i+3] = 0; // Make transparent
-                }
-            } else if (r >= 245 && g >= 245 && b >= 245) {
-                // Extreme whites are background
-                rgbValues[i+3] = 0; 
+    Write-Host "Processing $ImagePath..."
+    $file = Get-Item $ImagePath
+    $img = [System.Drawing.Bitmap]::FromFile($file.FullName)
+    $width = $img.Width
+    $height = $img.Height
+    
+    # Checkered backgrounds usually have two colors. 
+    # Let's sample a few points in the corner to find them.
+    $colorA = $img.GetPixel(0, 0)
+    $colorB = $null
+    
+    # Try to find the second color of the checkerboard near the corner
+    for ($x = 0; $x -lt 20; $x++) {
+        for ($y = 0; $y -lt 20; $y++) {
+            $p = $img.GetPixel($x, $y)
+            if ($p.R -ne $colorA.R -or $p.G -ne $colorA.G -or $p.B -ne $colorA.B) {
+                $colorB = $p
+                break
             }
         }
-        
-        System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, bmpData.Scan0, bytes);
-        clone.UnlockBits(bmpData);
-        
-        string outputPath = inputPath.Replace(".PNG", "-transparent.png").Replace(".png", "-transparent.png");
-        clone.Save(outputPath, ImageFormat.Png);
-        clone.Dispose();
-        Console.WriteLine("Saved: " + outputPath);
+        if ($colorB) { break }
     }
-}
-"@ -ReferencedAssemblies System.Drawing
 
-try {
-    Write-Host "Processing images..."
-    [ImageProcessor]::RemoveWhiteBackground("c:\Users\hjind\Downloads\the-cozee-store (2)\public\navyyy.png.PNG")
-    [ImageProcessor]::RemoveWhiteBackground("c:\Users\hjind\Downloads\the-cozee-store (2)\public\blackyyy.png.PNG")
-    [ImageProcessor]::RemoveWhiteBackground("c:\Users\hjind\Downloads\the-cozee-store (2)\public\pinkyyy.png.PNG")
-    Write-Host "Done processing!"
-} catch {
-    Write-Error $_
+    if ($null -eq $colorB) {
+        Write-Host "Could only find one background color. Using single color detection."
+        $targets = @($colorA)
+    } else {
+        Write-Host "Detected checkered pattern: RGB($($colorA.R),$($colorA.G),$($colorA.B)) and RGB($($colorB.R),$($colorB.G),$($colorB.B))"
+        $targets = @($colorA, $colorB)
+    }
+    
+    # We'll use a queue for flood fill
+    $queue = New-Object System.Collections.Generic.Queue[System.Drawing.Point]
+    $visited = New-Object 'bool[,]' $width, $height
+    
+    # Seeds: All edges to ensure we catch all background areas
+    for($x=0; $x -lt $width; $x++) { 
+        $queue.Enqueue((New-Object System.Drawing.Point($x, 0)))
+        $queue.Enqueue((New-Object System.Drawing.Point($x, ($height - 1))))
+    }
+    for($y=0; $y -lt $height; $y++) {
+        $queue.Enqueue((New-Object System.Drawing.Point(0, $y)))
+        $queue.Enqueue((New-Object System.Drawing.Point(($width - 1), $y)))
+    }
+
+    $tolerance = 40 # Increased tolerance for compressed JPG/PNG artifacts
+    
+    function IsBackground($p) {
+        foreach($t in $targets) {
+            if ([Math]::Abs($p.R - $t.R) -lt $tolerance -and `
+                [Math]::Abs($p.G - $t.G) -lt $tolerance -and `
+                [Math]::Abs($p.B - $t.B) -lt $tolerance) {
+                return $true
+            }
+        }
+        return $false
+    }
+
+    Write-Host "Running flood fill..."
+    while ($queue.Count -gt 0) {
+        $curr = $queue.Dequeue()
+        if ($curr.X -lt 0 -or $curr.X -ge $width -or $curr.Y -lt 0 -or $curr.Y -ge $height) { continue }
+        if ($visited[$curr.X, $curr.Y]) { continue }
+        
+        $p = $img.GetPixel($curr.X, $curr.Y)
+        if (IsBackground $p) {
+            $visited[$curr.X, $curr.Y] = $true
+            $img.SetPixel($curr.X, $curr.Y, [System.Drawing.Color]::Transparent)
+            
+            # Add neighbors
+            $queue.Enqueue((New-Object System.Drawing.Point(($curr.X + 1), $curr.Y)))
+            $queue.Enqueue((New-Object System.Drawing.Point(($curr.X - 1), $curr.Y)))
+            $queue.Enqueue((New-Object System.Drawing.Point($curr.X, ($curr.Y + 1))))
+            $queue.Enqueue((New-Object System.Drawing.Point($curr.X, ($curr.Y - 1))))
+        }
+    }
+    
+    # Save to a temporary file first to avoid issues saving back to the same file while open
+    $tempPath = [System.IO.Path]::GetTempFileName() + ".png"
+    $img.Save($tempPath, [System.Drawing.Imaging.ImageFormat]::Png)
+    $img.Dispose()
+    
+    # Copy back to original location
+    Move-Item -Path $tempPath -Destination $OutputPath -Force
+    Write-Host "Finished saving to $OutputPath"
 }
+
+$targetFiles = @{
+    "public\navyyy-old.png" = "public\navyyy_transparent.png"
+    "public\blackyyy-old.png" = "public\blackyyy_transparent.png"
+    "public\pinkyyy-old.png" = "public\pinkyyy_transparent.png"
+    "public\grey-1.png" = "public\grey_transparent.png"
+}
+
+foreach ($f in $targetFiles.Keys) {
+    Flood-Fill-Transparency $f $targetFiles[$f]
+}
+
