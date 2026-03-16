@@ -98,7 +98,7 @@ export function Home() {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12 md:gap-y-16">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16">
         {filteredProducts.map((product, idx) => (
           <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
             <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
@@ -127,7 +127,7 @@ export function Home() {
         ))}
 
         {filteredProducts.length === 0 && (
-          <div className="col-span-1 md:col-span-2 py-20 text-center text-xl opacity-60">
+          <div className="col-span-2 py-20 text-center text-xl opacity-60">
             No products found matching your criteria.
           </div>
         )}
