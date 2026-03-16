@@ -152,9 +152,9 @@ export function Home() {
               <span className="transform transition-transform group-hover:translate-x-2">→</span>
             </button>
           </div>
-          <div className="relative aspect-[4/5] bg-[#FDF5E6] rounded-3xl overflow-hidden group">
+          <div className="relative aspect-[3/4] bg-[#FDF5E6] rounded-3xl overflow-hidden group">
             <img
-              src="/about-lifestyle.png"
+              src="/about-cozee.jpg"
               alt="Premium Winter Wear"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
