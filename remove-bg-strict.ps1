@@ -1,5 +1,39 @@
 Add-Type -AssemblyName System.Drawing
 
+function Get-BoundingBox {
+    param([System.Drawing.Bitmap]$img)
+    
+    $minX = $img.Width
+    $minY = $img.Height
+    $maxX = 0
+    $maxY = 0
+    $found = $false
+    
+    # Sample every 2nd pixel for speed
+    for ($x = 0; $x -lt $img.Width; $x += 2) {
+        for ($y = 0; $y -lt $img.Height; $y += 2) {
+            $p = $img.GetPixel($x, $y)
+            if ($p.A -gt 20) { # Non-transparent enough
+                if ($x -lt $minX) { $minX = $x }
+                if ($y -lt $minY) { $minY = $y }
+                if ($x -gt $maxX) { $maxX = $x }
+                if ($y -gt $maxY) { $maxY = $y }
+                $found = $true
+            }
+        }
+    }
+    
+    if ($found) {
+        # Add a small buffer of 5 pixels
+        $minX = [Math]::Max(0, $minX - 5)
+        $minY = [Math]::Max(0, $minY - 5)
+        $maxX = [Math]::Min($img.Width - 1, $maxX + 5)
+        $maxY = [Math]::Min($img.Height - 1, $maxY + 5)
+        return New-Object System.Drawing.Rectangle($minX, $minY, ($maxX - $minX + 1), ($maxY - $minY + 1))
+    }
+    return $null
+}
+
 function Resize-Image {
     param(
         [System.Drawing.Bitmap]$img,
@@ -7,28 +41,40 @@ function Resize-Image {
         [int]$targetHeight
     )
     
+    # 1. Auto-crop to content
+    Write-Host "Detecting subject bounding box..."
+    $rect = Get-BoundingBox $img
+    if ($null -eq $rect) {
+        Write-Warning "Could not detect subject. Falling back to simple resize."
+        $sourceRect = New-Object System.Drawing.Rectangle(0, 0, $img.Width, $img.Height)
+    } else {
+        Write-Host "Subject found at X:$($rect.X) Y:$($rect.Y) W:$($rect.Width) H:$($rect.Height)"
+        $sourceRect = $rect
+    }
+
     $newImg = New-Object System.Drawing.Bitmap $targetWidth, $targetHeight
     $g = [System.Drawing.Graphics]::FromImage($newImg)
     $g.Clear([System.Drawing.Color]::Transparent)
     $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+    $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
     
-    # Calculate scaling factor to fit the image while maintaining aspect ratio
-    $ratioX = $targetWidth / $img.Width
-    $ratioY = $targetHeight / $img.Height
+    # 2. Calculate scaling factor to fit the cropped subject while maintaining aspect ratio
+    $ratioX = $targetWidth / $sourceRect.Width
+    $ratioY = $targetHeight / $sourceRect.Height
     $ratio = [Math]::Min($ratioX, $ratioY)
     
-    # Scale down slightly to leave a small margin if it hits the edges
-    $scale = 0.95
-    $ratio = $ratio * $scale
+    # Use a consistent visual scale - e.g. the hoodie should occupy ~85% of the frame
+    $visualScale = 0.85 
+    $ratio = $ratio * $visualScale
 
-    $newWidth = [int]($img.Width * $ratio)
-    $newHeight = [int]($img.Height * $ratio)
+    $newWidth = [int]($sourceRect.Width * $ratio)
+    $newHeight = [int]($sourceRect.Height * $ratio)
     
-    # Calculate centering
+    # 3. Calculate centering
     $posX = [int](($targetWidth - $newWidth) / 2)
     $posY = [int](($targetHeight - $newHeight) / 2)
     
-    $g.DrawImage($img, $posX, $posY, $newWidth, $newHeight)
+    $g.DrawImage($img, (New-Object System.Drawing.Rectangle($posX, $posY, $newWidth, $newHeight)), $sourceRect, [System.Drawing.GraphicsUnit]::Pixel)
     $g.Dispose()
     
     return $newImg
@@ -122,8 +168,8 @@ function Flood-Fill-Transparency {
         }
     }
     
-    # NEW: Resize and Pad to 848x1264
-    Write-Host "Resizing to 848x1264..."
+    # NEW: Resize and Pad to 848x1264 with Auto-Crop
+    Write-Host "Uniforming subject size to 848x1264..."
     $resizedImg = Resize-Image $img 848 1264
     $img.Dispose()
     
