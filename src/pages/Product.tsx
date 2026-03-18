@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
 import { SizeGuide } from '../components/SizeGuide';
 import { ProductReviews } from '../components/ProductReviews';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useSEO } from '../hooks/useSEO';
 
 export function Product() {
@@ -15,6 +15,8 @@ export function Product() {
   const { addToCart } = useStore();
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const buyButtonsRef = useRef<HTMLDivElement>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
 
   const product = products.find(p => p.id === Number(id));
 
@@ -54,6 +56,25 @@ export function Product() {
     jsonLd: productSchema,
   });
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show sticky bar if we scroll past the buttons (bounding rect is above viewport)
+        if (!entry.isIntersecting && entry.boundingClientRect.y < 0) {
+          setShowStickyBar(true);
+        } else {
+          setShowStickyBar(false);
+        }
+      },
+      { threshold: 0 }
+    );
+
+    if (buyButtonsRef.current) {
+      observer.observe(buyButtonsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [id]);
 
   const handleBuyNow = () => {
     if (product) {
@@ -181,7 +202,7 @@ export function Product() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div ref={buyButtonsRef} className="flex flex-col gap-4">
             <button
               onClick={() => addToCart(product.id)}
               className="w-full py-5 border-2 border-[var(--color-rojo)] text-[var(--color-rojo)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/5 transition-all cursor-pointer"
@@ -211,8 +232,30 @@ export function Product() {
         </div>
       </div>
 
-      <FAQ />
       <SizeGuide isOpen={isSizeGuideOpen} onClose={() => setIsSizeGuideOpen(false)} />
+
+      {/* Mobile Sticky Buy Bar */}
+      <AnimatePresence>
+        {showStickyBar && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--color-crema)] border-t border-[var(--color-rojo)]/10 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 md:hidden flex items-center justify-between gap-4"
+          >
+            <div className="flex flex-col flex-1 min-w-0">
+              <span className="font-bold text-[var(--color-rojo)] truncate text-sm">{product.title}</span>
+              <span className="font-bold text-[var(--color-rojo)]/80 text-sm">{product.price}</span>
+            </div>
+            <button
+              onClick={handleBuyNow}
+              className="px-6 py-3 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-bold text-sm hover:bg-[var(--color-rojo)]/90 active:scale-[0.98] transition-all cursor-pointer shadow-lg whitespace-nowrap"
+            >
+              Buy Now
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
