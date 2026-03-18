@@ -167,16 +167,20 @@ export function Home() {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="flex flex-col md:flex-row justify-between items-start text-lg md:text-xl font-medium">
-                <span className="flex-1 mb-1 md:mb-0 leading-tight">{product.title}</span>
-                <div className="flex flex-row md:flex-col items-center md:items-end gap-2 md:gap-1">
-                  <span className="text-[var(--color-rojo)] font-bold md:font-medium">{product.price}</span>
+              <div className="flex flex-col text-left">
+                <span className="text-xl md:text-3xl font-extrabold text-[var(--color-rojo)] leading-tight">
+                  {product.title.split(' - ')[1] || product.title}
+                </span>
+                <span className="text-base md:text-lg font-light text-[var(--color-rojo)] mt-0.5">
+                  Cozee™ Original
+                </span>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-xl md:text-2xl font-extrabold text-[var(--color-rojo)]">{product.price}</span>
                   {product.originalPrice && (
                     <span className="text-sm md:text-base line-through opacity-40 font-normal">{product.originalPrice}</span>
                   )}
                 </div>
               </div>
-              <div className="text-sm md:text-base opacity-60 mt-1">{product.category}</div>
             </Link>
           </ScrollReveal>
         ))}
