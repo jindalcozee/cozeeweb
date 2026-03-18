@@ -5,6 +5,7 @@ import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
 import { SizeGuide } from '../components/SizeGuide';
+import { ProductReviews } from '../components/ProductReviews';
 import { useState, useMemo } from 'react';
 import { useSEO } from '../hooks/useSEO';
 
