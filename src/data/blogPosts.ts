@@ -79,7 +79,7 @@ Ready to experience the coziest hoodie in India? [Shop the Cozee™ Original](/s
     excerpt: 'Looking for the perfect winter gift? Here are 10 thoughtful, cozy gift ideas she\'ll actually love — from wearable blankets to self-care essentials.',
     date: '2026-03-21',
     readTime: '5 min read',
-    image: '/pinkyyy_transparent.png',
+    image: '/blog_gift_ideas.jpg',
     category: 'Gift Guide',
     content: `
 ## The Best Cozy Gifts for Your Girlfriend
@@ -132,7 +132,7 @@ If you can only pick one gift from this list, go with the wearable blanket hoodi
     excerpt: 'Not all fleece is created equal. Learn the key differences between sherpa and regular fleece to make smarter winter wear choices.',
     date: '2026-03-23',
     readTime: '4 min read',
-    image: '/grey_transparent.png',
+    image: '/blog_sherpa_fleece.jpg',
     category: 'Education',
     content: `
 ## Sherpa Fleece vs Regular Fleece: The Complete Breakdown
