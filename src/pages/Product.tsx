@@ -160,9 +160,14 @@ export function Product() {
             <span className="text-[var(--color-rojo)]/60 font-medium uppercase tracking-wider text-sm">In Stock</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-rojo)] leading-tight mb-4 tracking-tight">
-            {product.title}
-          </h1>
+          <div className="flex flex-col mb-4 gap-1">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[var(--color-rojo)] leading-none tracking-tight">
+              {colorName}
+            </h1>
+            <h2 className="text-2xl md:text-3xl font-light text-[var(--color-rojo)] leading-tight">
+              Cozee™ Original
+            </h2>
+          </div>
 
           <div className="flex items-center gap-2 mb-6 cursor-pointer group" onClick={() => {
             document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -177,8 +182,8 @@ export function Product() {
             </span>
           </div>
 
-          <div className="flex items-baseline gap-4 mb-8">
-            <span className="text-3xl md:text-4xl font-bold text-[var(--color-rojo)]">
+          <div className="flex items-baseline gap-4 mb-8 mt-2">
+            <span className="text-4xl md:text-5xl font-extrabold text-[var(--color-rojo)] tracking-tight">
               {product.price}
             </span>
             {product.originalPrice && (
