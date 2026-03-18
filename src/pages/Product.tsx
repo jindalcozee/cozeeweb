@@ -164,6 +164,19 @@ export function Product() {
             {product.title}
           </h1>
 
+          <div className="flex items-center gap-2 mb-6 cursor-pointer group" onClick={() => {
+            document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' });
+          }}>
+            <div className="flex text-[var(--color-rojo)]">
+              {[...Array(5)].map((_, i) => (
+                <Check key={i} size={16} strokeWidth={4} className="text-[#C11B17] mr-1" />
+              ))}
+            </div>
+            <span className="text-[var(--color-rojo)]/80 font-medium text-sm border-b border-transparent group-hover:border-[var(--color-rojo)]/30 transition-colors">
+              4.9/5 (248 reviews) <span className="mx-1">•</span> <span className="italic">Write a review</span>
+            </span>
+          </div>
+
           <div className="flex items-baseline gap-4 mb-8">
             <span className="text-3xl md:text-4xl font-bold text-[var(--color-rojo)]">
               {product.price}
@@ -230,7 +243,14 @@ export function Product() {
             </div>
           </div>
         </div>
+        </div>
       </div>
+
+      <div id="reviews-section">
+        <ProductReviews />
+      </div>
+
+      <FAQ />
 
       <SizeGuide isOpen={isSizeGuideOpen} onClose={() => setIsSizeGuideOpen(false)} />
 
