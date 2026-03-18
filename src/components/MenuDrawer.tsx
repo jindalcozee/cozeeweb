@@ -10,6 +10,7 @@ export function MenuDrawer() {
     { label: 'Home', path: '/' },
     { label: 'Shop All', path: '/shop?category=All' },
     { label: 'Originals', path: '/shop?category=Originals' },
+    { label: 'Journal', path: '/blog' },
     { label: 'About Us', path: '/#about' },
     { label: 'FAQ', path: '/#faq' },
     { label: 'Contact Us', path: '/contact' },
