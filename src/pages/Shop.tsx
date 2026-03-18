@@ -3,8 +3,15 @@ import { Search } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { products, categories } from '../data/products';
 import { ScrollReveal } from '../components/ScrollReveal';
+import { useSEO } from '../hooks/useSEO';
 
 export function Shop() {
+    useSEO({
+        title: 'Shop Wearable Blanket Hoodies Online – Cozee™ India',
+        description: 'Browse Cozee™ oversized wearable hoodies in Navy, Grey, Black & Pink. Premium sherpa fleece. ₹2,199 only. Free shipping across India.',
+        canonical: 'https://thecozee.in/shop',
+    });
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const initialCategory = searchParams.get('category') || 'All';

@@ -5,7 +5,8 @@ import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
 import { SizeGuide } from '../components/SizeGuide';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useSEO } from '../hooks/useSEO';
 
 export function Product() {
   const { id } = useParams();
@@ -15,6 +16,43 @@ export function Product() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const product = products.find(p => p.id === Number(id));
+
+  // Extract color name from product title (e.g., "Cozee™ Original - Navy" -> "Navy Blue")
+  const colorName = product?.title.split(' - ')[1] || '';
+
+  const productSchema = useMemo(() => {
+    if (!product) return undefined;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.title,
+      image: `https://thecozee.in${product.image}`,
+      description: product.description,
+      brand: { '@type': 'Brand', name: 'Cozee' },
+      offers: {
+        '@type': 'Offer',
+        price: '2199',
+        priceCurrency: 'INR',
+        availability: 'https://schema.org/InStock',
+        url: `https://thecozee.in/product/${product.id}`,
+        seller: { '@type': 'Organization', name: 'Cozee' },
+      },
+    };
+  }, [product]);
+
+  useSEO({
+    title: product
+      ? `${product.title} – Wearable Blanket Hoodie | ₹2,199 – Cozee™`
+      : 'Product Not Found – Cozee™',
+    description: product
+      ? `The ${product.title}. Ultra-soft sherpa fleece wearable blanket hoodie in ${colorName}. Oversized, unisex, perfect for winter nights. Order now – ₹2,199.`
+      : 'This product could not be found.',
+    canonical: product ? `https://thecozee.in/product/${product.id}` : undefined,
+    ogImage: product ? `https://thecozee.in${product.image}` : undefined,
+    ogType: 'product',
+    jsonLd: productSchema,
+  });
+
 
   const handleBuyNow = () => {
     if (product) {

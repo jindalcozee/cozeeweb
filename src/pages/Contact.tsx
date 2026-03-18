@@ -1,8 +1,16 @@
 import React from 'react';
 import { Mail, Phone, Instagram, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useSEO } from '../hooks/useSEO';
 
 export function Contact() {
+    useSEO({
+        title: 'Contact Us – Cozee™ India',
+        description: 'Have a question about your Cozee™ order or our premium wearable blanket hoodies? Get in touch with us via email, phone, or Instagram.',
+        canonical: 'https://thecozee.in/contact',
+    });
+
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Search } from 'lucide-react';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { Hero3D } from '../components/Hero3D';
@@ -6,8 +6,63 @@ import { FAQ } from '../components/FAQ';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { Testimonials } from '../components/Testimonials';
 import { products, categories } from '../data/products';
+import { useSEO } from '../hooks/useSEO';
 
 export function Home() {
+  const faqSchema = useMemo(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is a wearable blanket hoodie?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'A wearable blanket hoodie is an oversized, ultra-warm hoodie made from sherpa fleece that you can wear like a blanket. Perfect for lounging, WFH, and cozy winter nights.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is Cozee™ unisex?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes! Cozee™ hoodies are designed to fit everyone — men, women, and teens. One size fits all.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What material is Cozee™ made of?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Cozee™ is crafted from premium sherpa fleece on the inside and ultra-soft flannel on the outside for maximum warmth and comfort.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do you offer free shipping?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, we offer free shipping across India on all orders.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How do I wash my Cozee™?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Machine wash cold, tumble dry low. Do not bleach or iron.',
+        },
+      },
+    ],
+  }), []);
+
+  useSEO({
+    title: "Cozee™ – Premium Wearable Blanket Hoodies | India's Coziest Hoodie",
+    description: "Wrap yourself in warmth with Cozee™ — India's premium wearable blanket hoodie. Ultra-soft sherpa fleece, oversized comfort. Starting at ₹2,199. Free shipping across India.",
+    canonical: 'https://thecozee.in/',
+    jsonLd: faqSchema,
+  });
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { hash } = useLocation();
 

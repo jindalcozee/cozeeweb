@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /signup
+Disallow: /account
+Disallow: /checkout
+
+Sitemap: https://thecozee.in/sitemap.xml
