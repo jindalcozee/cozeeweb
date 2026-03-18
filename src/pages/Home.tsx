@@ -167,13 +167,13 @@ export function Home() {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="flex justify-between items-start text-lg md:text-xl font-medium">
-                <span className="flex-1">{product.title}</span>
-                <div className="flex flex-col items-end gap-1">
+              <div className="flex flex-col md:flex-row justify-between items-start text-lg md:text-xl font-medium">
+                <span className="flex-1 mb-1 md:mb-0 leading-tight">{product.title}</span>
+                <div className="flex flex-row md:flex-col items-center md:items-end gap-2 md:gap-1">
+                  <span className="text-[var(--color-rojo)] font-bold md:font-medium">{product.price}</span>
                   {product.originalPrice && (
                     <span className="text-sm md:text-base line-through opacity-40 font-normal">{product.originalPrice}</span>
                   )}
-                  <span className="text-[var(--color-rojo)]">{product.price}</span>
                 </div>
               </div>
               <div className="text-sm md:text-base opacity-60 mt-1">{product.category}</div>

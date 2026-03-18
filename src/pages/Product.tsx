@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check, Truck, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Check, Truck, ShieldCheck, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { products } from '../data/products';
 import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -169,7 +169,7 @@ export function Product() {
           }}>
             <div className="flex text-[var(--color-rojo)]">
               {[...Array(5)].map((_, i) => (
-                <Check key={i} size={16} strokeWidth={4} className="text-[#C11B17] mr-1" />
+                <Star key={i} size={16} fill="currentColor" strokeWidth={1} className="text-[#C11B17] mr-0.5" />
               ))}
             </div>
             <span className="text-[var(--color-rojo)]/80 font-medium text-sm border-b border-transparent group-hover:border-[var(--color-rojo)]/30 transition-colors">
