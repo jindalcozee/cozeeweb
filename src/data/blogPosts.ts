@@ -16,7 +16,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Discover what makes wearable blanket hoodies the coziest innovation in winter comfort — and why everyone in India is talking about them.',
     date: '2026-03-19',
     readTime: '6 min read',
-    image: '/navyyy_transparent.png',
+    image: '/blog_wearable_blanket.png',
     category: 'Guide',
     content: `
 ## What Is a Wearable Blanket Hoodie?
