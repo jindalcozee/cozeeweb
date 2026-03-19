@@ -90,7 +90,7 @@ export function BlogPost() {
         {/* CTA */}
         <div className="mt-12 p-8 md:p-10 bg-[var(--color-rojo)]/5 rounded-3xl border border-[var(--color-rojo)]/10 text-center">
           <h3 className="text-2xl md:text-3xl font-bold text-[var(--color-rojo)] mb-3">Ready to Get Cozy?</h3>
-          <p className="text-lg text-[var(--color-rojo)]/70 mb-6">Experience India's Premium Winterwear, starting at ₹2,199.</p>
+          <p className="text-lg text-[var(--color-rojo)]/70 mb-6">Experience India's Premium Winterwear and ultimate wearable blanket hoodie, starting at ₹2,199.</p>
           <Link
             to="/shop"
             className="inline-block px-10 py-4 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-bold text-lg hover:bg-[var(--color-rojo)]/90 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-[var(--color-rojo)]/20"
