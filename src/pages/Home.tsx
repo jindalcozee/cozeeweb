@@ -57,8 +57,8 @@ export function Home() {
   }), []);
 
   useSEO({
-    title: "Cozee™ – Premium Wearable Blanket Hoodies | India's Coziest Hoodie",
-    description: "Wrap yourself in warmth with Cozee™ — India's premium wearable blanket hoodie. Ultra-soft sherpa fleece, oversized comfort. Starting at ₹2,199. Free shipping across India.",
+    title: "Cozee™ – Premium Winterwear | India's Coziest Hoodie",
+    description: "Wrap yourself in warmth with Cozee™ — India's Premium Winterwear. Ultra-soft sherpa fleece, oversized comfort. Starting at ₹2,199. Free shipping across India.",
     canonical: 'https://thecozee.in/',
     jsonLd: faqSchema,
   });

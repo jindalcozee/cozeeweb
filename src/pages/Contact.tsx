@@ -6,7 +6,7 @@ import { useSEO } from '../hooks/useSEO';
 export function Contact() {
     useSEO({
         title: 'Contact Us – Cozee™ India',
-        description: 'Have a question about your Cozee™ order or our premium wearable blanket hoodies? Get in touch with us via email, phone, or Instagram.',
+        description: 'Have a question about your Cozee™ order or our Premium Winterwear? Get in touch with us via email, phone, or Instagram.',
         canonical: 'https://thecozee.in/contact',
     });
 
