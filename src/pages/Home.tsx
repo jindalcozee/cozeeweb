@@ -107,7 +107,7 @@ export function Home() {
   return (
     <main>
       <ScrollReveal width="100%">
-        <h1 className="text-[10vw] md:text-[7vw] font-black leading-[0.9] mb-8 md:mb-16 tracking-tighter text-center uppercase">
+        <h1 className="text-[10vw] md:text-[7vw] font-black leading-[1.1] mb-8 md:mb-16 tracking-tighter text-center uppercase">
           Stay Warm,<br />Stay Cozee.
         </h1>
       </ScrollReveal>

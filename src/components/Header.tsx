@@ -40,7 +40,7 @@ export function Header() {
         </Link>
       </div>
 
-      <Link to="/" className="text-[var(--color-rojo)] flex items-center justify-center transition-transform hover:scale-105">
+      <Link to="/" className="text-[var(--color-rojo)] flex items-center justify-center -ml-12 md:-ml-20 transition-transform hover:scale-105">
         <span className="text-3xl md:text-5xl font-black tracking-tighter font-logo text-center">COZEE</span>
       </Link>
 
