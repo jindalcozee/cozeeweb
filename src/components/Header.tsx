@@ -23,7 +23,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="glass-header -mx-4 md:-mx-8 px-4 md:px-8 py-4 mb-12 md:mb-20 rounded-b-2xl transition-all duration-300">
+    <header className="glass-header flex justify-between items-center -mx-4 md:-mx-8 px-4 md:px-8 py-4 mb-12 md:mb-20 rounded-b-2xl transition-all duration-300">
       <div className="flex items-center gap-4 md:gap-8">
         <button
           onClick={toggleMenu}
