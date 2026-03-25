@@ -44,11 +44,11 @@ export function Hero3D() {
 
       <div className="flex h-full flex-col md:flex-row">
         {/* Left content */}
-        <div className="flex-1 px-8 py-10 md:p-12 relative z-10 flex flex-col justify-center items-start text-center md:text-left items-center md:items-start">
+        <div className="flex-1 px-8 py-10 md:p-12 relative z-10 flex flex-col justify-center items-center text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-[var(--color-crema)] mb-4 tracking-tight flex flex-col">
             <span>Experience the</span>
             <span>Ultimate</span>
-            <span className="relative flex w-full overflow-hidden h-[1.2em] md:pb-4 md:pt-1">
+            <span className="relative flex w-full overflow-hidden h-[1.2em] md:pb-4 md:pt-1 justify-center">
               {titles.map((title, index) => (
                 <motion.span
                   key={index}
