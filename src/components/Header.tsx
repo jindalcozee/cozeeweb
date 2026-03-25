@@ -23,7 +23,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="flex justify-between items-center mb-12 md:mb-20 pt-2">
+    <header className="glass-header -mx-4 md:-mx-8 px-4 md:px-8 py-4 mb-12 md:mb-20 rounded-b-2xl transition-all duration-300">
       <div className="flex items-center gap-4 md:gap-8">
         <button
           onClick={toggleMenu}
@@ -40,8 +40,8 @@ export function Header() {
         </Link>
       </div>
 
-      <Link to="/" className="text-[var(--color-rojo)] flex items-center justify-center -ml-12 md:-ml-20">
-        <span className="text-3xl md:text-4xl font-black tracking-tighter font-logo text-center">COZEE</span>
+      <Link to="/" className="text-[var(--color-rojo)] flex items-center justify-center transition-transform hover:scale-105">
+        <span className="text-3xl md:text-5xl font-black tracking-tighter font-logo text-center">COZEE</span>
       </Link>
 
       <button

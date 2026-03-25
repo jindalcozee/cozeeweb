@@ -1,13 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Montserrat:wght@900&display=swap');
 @import "tailwindcss";
 
 @theme {
+  /* Core Brand Colors */
   --color-crema: #fff6ea;
+  --color-crema-dark: #f5ecd7;
   --color-rojo: #bd2025;
+  --color-rojo-dark: #8b0000;
+  
+  /* Semantic Tokens */
   --color-crema-25: #fff6ea40;
   --color-rojo-25: #bd202540;
+  
+  /* Typography */
   --font-logo: "Montserrat", sans-serif;
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
 
+  /* Animations */
   --animate-spotlight: spotlight 2s ease .75s 1 forwards;
 
   @keyframes spotlight {
@@ -15,7 +25,6 @@
       opacity: 0;
       transform: translate(-72%, -62%) scale(0.5);
     }
-
     100% {
       opacity: 1;
       transform: translate(-50%, -40%) scale(1);
@@ -26,7 +35,15 @@
 body {
   background-color: var(--color-crema);
   color: var(--color-rojo);
-  font-family: "Inter", Arial, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+.glass-header {
+  @apply backdrop-blur-md bg-[var(--color-crema)]/80 border-b border-[var(--color-rojo)]/10 sticky top-0 z-50;
 }

@@ -107,7 +107,9 @@ export function Home() {
   return (
     <main>
       <ScrollReveal width="100%">
-        <h1 className="text-[10vw] md:text-[6.5vw] font-bold leading-none mb-8 md:mb-16 tracking-tighter text-center">Stay Warm, Stay Cozee.</h1>
+        <h1 className="text-[10vw] md:text-[7vw] font-black leading-[0.9] mb-8 md:mb-16 tracking-tighter text-center uppercase">
+          Stay Warm,<br />Stay Cozee.
+        </h1>
       </ScrollReveal>
 
       <ScrollReveal width="100%" delay={0.4}>
@@ -158,12 +160,12 @@ export function Home() {
           <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
             <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
               <div
-                className="aspect-square overflow-hidden mb-4 rounded-3xl relative bg-transparent group-hover:shadow-2xl transition-shadow duration-500"
+                className="aspect-square overflow-hidden mb-6 rounded-[2.5rem] relative bg-white/50 group-hover:bg-white transition-colors duration-500 group-hover:shadow-[0_20px_50px_rgba(189,32,37,0.15)]"
               >
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply object-contain p-4"
+                  className="w-full h-full group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-multiply object-contain p-6"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -206,9 +208,9 @@ export function Home() {
             <p className="text-lg md:text-xl opacity-80 leading-relaxed">
               Every piece in our collection is an exclusive, limited-run design. We meticulously craft each Cozee to be the ultimate companion for your cozee nights in. Experience the luxury of true warmth.
             </p>
-            <button className="mt-10 border-b-2 border-[var(--color-rojo)] pb-1 text-xl font-medium hover:opacity-70 transition-opacity flex items-center gap-2 group cursor-pointer">
+            <button className="mt-10 border-b-2 border-[var(--color-rojo)] pb-2 text-xl font-semibold hover:opacity-70 transition-all flex items-center gap-3 group cursor-pointer">
               Discover Our Story
-              <span className="transform transition-transform group-hover:translate-x-2">→</span>
+              <span className="transform transition-transform group-hover:translate-x-3 text-2xl">→</span>
             </button>
           </div>
           <div className="relative aspect-[3/4] bg-[#FDF5E6] rounded-3xl overflow-hidden group">
