@@ -107,7 +107,7 @@ export function Home() {
   return (
     <main>
       <ScrollReveal width="100%">
-        <h1 className="text-[20vw] md:text-[14vw] font-bold leading-none mb-8 md:mb-16 tracking-tighter ml-[-0.05em]">Store</h1>
+        <h1 className="text-[12vw] md:text-[8vw] font-bold leading-none mb-8 md:mb-16 tracking-tighter text-center">stay warm, stay cozee.</h1>
       </ScrollReveal>
 
       <ScrollReveal width="100%" delay={0.4}>
