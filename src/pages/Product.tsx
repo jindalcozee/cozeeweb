@@ -258,7 +258,7 @@ export function Product() {
             </div>
             <div className="flex flex-col gap-2">
               <ShieldCheck size={24} className="text-[var(--color-rojo)]/60" />
-              <h4 className="font-medium text-[var(--color-rojo)]">30-Day Returns</h4>
+              <h4 className="font-medium text-[var(--color-rojo)]">7-Day Returns</h4>
               <p className="text-sm text-[var(--color-rojo)]/60">Not cozee enough? Return it easily.</p>
             </div>
           </div>

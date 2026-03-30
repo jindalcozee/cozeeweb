@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     question: "What is your return policy?",
-    answer: "We offer a 30-day return policy. If you're not completely cozee with your purchase, you can return it in its original condition for a full refund."
+    answer: "We offer a 7-day return policy. If you're not completely cozee with your purchase, you can return it in its original condition for a full refund."
   }
 ];
 
