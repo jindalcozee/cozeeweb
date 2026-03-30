@@ -11,7 +11,7 @@ export const products = [
     images: ['/navyyy_transparent.png', '/blue.png'],
     bgColor: '#FFF5EB',
     contain: true,
-    description: 'The original Cozee wearable blanket in a deep, rich navy blue. Made with ultra-soft flannel fleece on the outside and warm sherpa fleece on the outside. Perfect for those chilly evenings.',
+    description: 'The original Cozee wearable blanket in a deep, rich navy blue. Made with ultra-soft flannel fleece on the outside and warm sherpa fleece on the inside. Perfect for those chilly evenings.',
   },
   {
     id: 2,
