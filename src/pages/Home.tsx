@@ -164,7 +164,7 @@ export function Home() {
               >
                 <img
                   src={product.image}
-                  alt={product.title}
+                  alt={`${product.title} – Oversized Wearable Blanket Hoodie | Cozee™ India`}
                   className="w-full h-full group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-multiply object-contain p-6"
                   referrerPolicy="no-referrer"
                 />
@@ -216,7 +216,7 @@ export function Home() {
           <div className="relative aspect-[3/4] bg-[#FDF5E6] rounded-3xl overflow-hidden group">
             <img
               src="/about-cozee.jpg"
-              alt="Premium Winter Wear"
+              alt="Premium Cozee™ Winterwear – Handcrafted Oversized Wearable Blanket Hoodie"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />

@@ -86,7 +86,7 @@ export function Hero3D() {
         <div className="flex-1 relative hidden md:flex items-center justify-center p-4 md:p-8 pb-8 md:pb-8">
           <motion.img
             src="/red-removebg-preview.png"
-            alt="Cozee Wearable"
+            alt="Cozee™ Red Wearable Blanket Hoodie – Premium Oversized Sherpa Fleece Hoodie India"
             className="w-full h-full object-contain max-h-[300px] md:max-h-[400px] drop-shadow-2xl origin-bottom"
             animate={isMobile ? {} : {
               rotate: [0, 6, 2, 8, 1, 5, 0],
