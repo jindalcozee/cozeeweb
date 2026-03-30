@@ -220,6 +220,21 @@ export function Product() {
             </div>
           </div>
 
+          {/* Material Section */}
+          <div className="mb-10 pt-8 border-t border-[var(--color-rojo)]/10">
+            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[var(--color-rojo)]/50 mb-4">Material</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-[var(--color-rojo)]/5 rounded-2xl p-4">
+                <span className="block text-xs font-bold uppercase tracking-widest text-[var(--color-rojo)]/40 mb-1">Inner Lining</span>
+                <span className="text-lg font-semibold text-[var(--color-rojo)]">Sherpa Fleece</span>
+              </div>
+              <div className="bg-[var(--color-rojo)]/5 rounded-2xl p-4">
+                <span className="block text-xs font-bold uppercase tracking-widest text-[var(--color-rojo)]/40 mb-1">Outer Lining</span>
+                <span className="text-lg font-semibold text-[var(--color-rojo)]">Flannel Fleece</span>
+              </div>
+            </div>
+          </div>
+
           <div ref={buyButtonsRef} className="flex flex-col gap-4">
             <button
               onClick={() => addToCart(product.id)}
