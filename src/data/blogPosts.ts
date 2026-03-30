@@ -237,4 +237,122 @@ That's what the Cozee™ Original is. It's the natural evolution of the oversize
 [Shop the Black Cozee™ →](/product/3)
     `.trim(),
   },
+  {
+    slug: 'how-to-survive-delhi-winter',
+    title: 'How to Survive a Delhi Winter Without Turning Into an Icicle',
+    excerpt: 'Delhi winters hit different. Here are battle-tested tips to stay warm, healthy, and stylish when the fog rolls in.',
+    date: '2026-03-27',
+    readTime: '5 min read',
+    image: '/navyyy_transparent.png',
+    category: 'Lifestyle',
+    content: `
+## Delhi Winters Are No Joke
+
+Every year, Delhi transforms from a scorching furnace into a freezing fog chamber. Temperatures dip to 2–4°C on the worst nights, and if you're not prepared, you'll spend three months shivering under a pile of razais.
+
+Here's your survival guide.
+
+## 1. Layer Like a Pro
+
+The biggest mistake? Wearing one thick jacket and calling it a day. Instead, layer up:
+- **Base layer:** A thermal or full-sleeve t-shirt
+- **Mid layer:** A fleece or wearable blanket hoodie (we might be biased)
+- **Outer layer:** A windproof jacket for stepping outside
+
+Layering traps warm air between fabrics, keeping you far warmer than a single bulky coat.
+
+## 2. Invest in Quality Winterwear
+
+Cheap fleece from Sarojini might look tempting, but it pills after two washes and barely keeps you warm. Invest in quality pieces that last — like a premium sherpa fleece hoodie that stays soft wash after wash.
+
+## 3. Hot Beverages Are Your Best Friend
+
+Keep a thermos handy. Adrak chai, hot cocoa, or turmeric milk — whatever keeps you warm from the inside. Pro tip: avoid too much coffee late in the day; it dehydrates you and actually makes you feel colder.
+
+## 4. Don't Ignore Your Feet
+
+Your feet lose heat faster than you think. Invest in good woolen or fleece-lined socks. Walking on cold marble floors in bare feet is a recipe for catching a chill.
+
+## 5. Make Your Home Cozy
+
+- Use heavy curtains to block cold drafts
+- Place a rug on cold tile floors
+- Keep a wearable blanket handy for WFH days
+- An oil heater works better than a blower for sustained warmth
+
+## 6. Protect Your Skin
+
+Delhi winter + pollution = disaster for skin. Use:
+- A thick moisturizer (not a light lotion)
+- SPF — yes, even in winter
+- Lip balm — cracked lips are the worst
+- A humidifier if your room gets too dry
+
+## The Cozee™ Winter Kit
+
+If we had to build the perfect Delhi winter survival kit, it would be:
+1. **Cozee™ Wearable Blanket Hoodie** — for all-day home warmth
+2. **Thermal innerwear** — for outdoor trips
+3. **Fleece-lined socks** — for those marble floors
+4. **A good moisturizer** — for pollution defense
+
+Stay warm. Stay smart. Stay Cozee.
+
+[Shop the Cozee™ Collection →](/shop)
+    `.trim(),
+  },
+  {
+    slug: 'psychology-of-comfort-clothing',
+    title: 'The Psychology Behind Comfort Clothing: Why Cozy Clothes Make You Happier',
+    excerpt: 'Science says your clothes affect your mood. Here\'s why wearing something soft and cozy can genuinely make your day better.',
+    date: '2026-03-29',
+    readTime: '4 min read',
+    image: '/pinkyyy_transparent.png',
+    category: 'Wellness',
+    content: `
+## Your Clothes Are Changing Your Mood (Literally)
+
+Ever noticed how putting on your favorite hoodie instantly makes you feel better? That's not just your imagination — it's science.
+
+Researchers call it **"enclothed cognition"** — the idea that the clothes you wear directly influence your psychological state. And when it comes to comfort clothing, the effects are powerful.
+
+## The Science Behind Comfort
+
+### Touch Triggers Calm
+Soft fabrics like sherpa fleece activate **C-tactile afferents** — special nerve fibers in your skin that respond to gentle touch. When triggered, they send signals to your brain that reduce cortisol (the stress hormone) and increase oxytocin (the love hormone).
+
+In simple terms: wearing something soft literally reduces your stress.
+
+### Warmth = Safety
+Humans are wired to associate physical warmth with emotional safety. Studies from Yale University found that people holding a warm beverage rated strangers as more trustworthy and friendly. The same principle applies to warm clothing — it creates a subconscious sense of security.
+
+### The Comfort Uniform
+Psychologist Dr. Carolyn Mair explains that having a go-to comfort outfit reduces **decision fatigue**. When you slip into your favorite oversized hoodie, your brain doesn't have to work hard. It knows this outfit = comfort = safety.
+
+## Why Oversized Fits Feel Better
+
+There's a reason oversized clothes feel more comforting than fitted ones:
+
+- **Less restriction** — your body moves freely, reducing physical tension
+- **Cocoon effect** — the extra fabric creates a sense of being "wrapped up" or held
+- **No self-consciousness** — you're not worried about how your body looks, which frees up mental energy
+
+## How to Build a Comfort Wardrobe
+
+You don't need a closet full of expensive pieces. Just a few key staples:
+
+1. **A premium wearable blanket hoodie** — the cornerstone of any comfort wardrobe
+2. **Soft cotton joggers** — for that perfect WFH bottom half
+3. **Fleece-lined socks** — never underestimate warm feet
+4. **A lightweight throw** — for the couch, the bed, everywhere
+
+## The Takeaway
+
+Wearing comfortable clothes isn't lazy — it's self-care. When you prioritize how your clothes make you feel, you're investing in your mental health.
+
+So the next time someone judges you for wearing a wearable blanket hoodie at 2 PM on a Tuesday — just know that science is on your side.
+
+[Treat yourself → Shop Cozee™](/shop)
+    `.trim(),
+  },
 ];
