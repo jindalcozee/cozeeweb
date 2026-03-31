@@ -89,7 +89,9 @@ export function Checkout() {
 
     if (paymentMethod === 'cod') {
       try {
-        // 1. Send email notification
+        const { data: { user } } = await supabase.auth.getUser();
+
+        // 1. Send order to backend (handles email & DB insert)
         await fetch('/api/confirm-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -105,23 +107,10 @@ export function Checkout() {
             total,
             paymentMethod: 'cod',
             discount,
-            couponCode: appliedCoupon?.code
+            couponCode: appliedCoupon?.code,
+            userId: user?.id
           })
         });
-
-        // 2. Save to Supabase if user is logged in
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase.from('orders').insert({
-            user_id: user.id,
-            total_amount: total,
-            status: 'pending_cod',
-            items: cartItems,
-            razorpay_order_id: 'COD',
-            discount_amount: discount,
-            coupon_code: appliedCoupon?.code
-          });
-        }
 
         setIsSubmitting(false);
         setIsSuccess(true);
@@ -172,7 +161,9 @@ export function Checkout() {
         handler: async function (response: any) {
           // Payment successful
           try {
-            // 1. Send email notification
+            const { data: { user } } = await supabase.auth.getUser();
+
+            // 1. Send order to backend (handles email & DB insert)
             await fetch('/api/confirm-order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -188,23 +179,11 @@ export function Checkout() {
                 total,
                 paymentMethod: 'prepaid',
                 discount,
-                couponCode: appliedCoupon?.code
+                couponCode: appliedCoupon?.code,
+                razorpayOrderId: response.razorpay_order_id,
+                userId: user?.id
               })
             });
-
-            // 2. Save to Supabase if user is logged in
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-              await supabase.from('orders').insert({
-                user_id: user.id,
-                total_amount: total,
-                status: 'paid',
-                items: cartItems,
-                razorpay_order_id: response.razorpay_order_id,
-                discount_amount: discount,
-                coupon_code: appliedCoupon?.code
-              });
-            }
           } catch (error) {
             console.error("Order processing failed:", error);
           }

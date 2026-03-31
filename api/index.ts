@@ -3,6 +3,7 @@ import Razorpay from "razorpay";
 import cors from "cors";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import { createClient } from '@supabase/supabase-js';
 
 dotenv.config();
 
@@ -10,6 +11,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Initialize Supabase backend client if env vars are present
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const supabase = (supabaseUrl && supabaseKey) ? createClient(supabaseUrl, supabaseKey) : null;
 
 // API Routes
 app.post("/api/create-order", async (req, res) => {
@@ -44,15 +50,38 @@ app.post("/api/confirm-order", async (req, res) => {
         const orderData = req.body;
         const {
             email, firstName, lastName, phone, address, city, postalCode,
-            cartItems, total, paymentMethod, discount, couponCode
+            cartItems, total, paymentMethod, discount, couponCode, razorpayOrderId, userId
         } = orderData;
 
-        // Use environment variables for SMTP configuration
-        // Recommended: Use a service like Resend or Gmail App Password
+        // 1. Save to Supabase
+        if (supabase) {
+            try {
+                await supabase.from('orders').insert({
+                    user_id: userId || null, // Allow null for guests
+                    total_amount: total,
+                    status: paymentMethod === 'cod' ? 'pending_cod' : 'paid',
+                    items: cartItems,
+                    razorpay_order_id: razorpayOrderId || 'COD',
+                    discount_amount: discount || 0,
+                    coupon_code: couponCode || null,
+                    // Attempt to save customer details if columns exist
+                    customer_email: email,
+                    customer_name: `${firstName} ${lastName}`,
+                    customer_phone: phone,
+                    shipping_address: `${address}, ${city}, ${postalCode}`
+                });
+                console.log("Order saved to Supabase (Backend)");
+            } catch (dbError) {
+                console.error("Failed to save order to Supabase:", dbError);
+                // Proceed to email even if DB fails
+            }
+        }
+
+        // 2. Send Emails via Nodemailer
         const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST || 'smtp.office365.com', // Default to Outlook/O365
+            host: process.env.EMAIL_HOST || 'smtp.office365.com',
             port: parseInt(process.env.EMAIL_PORT || '587'),
-            secure: false, // true for 465, false for other ports
+            secure: false, 
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS,
@@ -67,7 +96,8 @@ app.post("/api/confirm-order", async (req, res) => {
             </tr>
         `).join('');
 
-        const mailOptions = {
+        // Email 1: To the Admin (harsh@thecozee.in)
+        const adminMailOptions = {
             from: `"Cozee Store" <${process.env.EMAIL_USER}>`,
             to: 'harsh@thecozee.in',
             subject: `New Order Received! (${paymentMethod === 'cod' ? 'COD' : 'Prepaid'}) - ${firstName} ${lastName}`,
@@ -96,9 +126,7 @@ app.post("/api/confirm-order", async (req, res) => {
                                 <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Price</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            ${itemsHtml}
-                        </tbody>
+                        <tbody>${itemsHtml}</tbody>
                         <tfoot>
                             <tr style="background-color: #f8f8f8;">
                                 <td colspan="2" style="padding: 10px; border: 1px solid #ddd; text-align: right;"><strong>${paymentMethod === 'cod' ? 'Total (Collect at Delivery)' : 'Total Paid'}</strong>${couponCode ? `<br/><span style="font-size: 12px; color: #666;">Coupon: ${couponCode} (-₹${discount})</span>` : ''}</td>
@@ -106,21 +134,61 @@ app.post("/api/confirm-order", async (req, res) => {
                             </tr>
                         </tfoot>
                     </table>
-                    <p style="margin-top: 30px; text-align: center; color: #888; font-size: 12px;">© 2026 Cozee™. All rights reserved.</p>
+                </div>
+            `,
+        };
+
+        // Email 2: To the Customer
+        const customerMailOptions = {
+            from: `"Cozee Team" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: `Thank you for your Cozee order! 💖`,
+            html: `
+                <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+                    <h1 style="color: #C11B17; text-align: center;">You're Officialy Part of the Cozee Squad!</h1>
+                    <p style="font-size: 16px;">Hi ${firstName},</p>
+                    <p style="font-size: 16px;">Thank you for your order! We're currently packing up your Cozee items and getting them ready for shipping. We will notify you once your package is on its way.</p>
+                    
+                    ${paymentMethod === 'cod' ? `
+                        <div style="background-color: #FFF5F5; border: 1px dashed #C11B17; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                            <p style="margin: 0; font-size: 16px;">You selected Cash on Delivery. Please keep <strong>₹${total}</strong> ready for when your package arrives.</p>
+                        </div>
+                    ` : ''}
+
+                    <h2 style="color: #C11B17; margin-top: 30px;">Order Summary</h2>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <thead>
+                            <tr style="background-color: #f8f8f8;">
+                                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Item</th>
+                                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>${itemsHtml}</tbody>
+                    </table>
+                    
+                    <p style="margin-top: 30px; font-size: 16px;">If you have any questions, simply reply to this email!</p>
+                    <p style="font-size: 16px;">Stay Warm,<br/><strong>The Cozee Team</strong></p>
                 </div>
             `,
         };
 
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-            await transporter.sendMail(mailOptions);
+            await Promise.all([
+                transporter.sendMail(adminMailOptions),
+                transporter.sendMail(customerMailOptions)
+            ]);
+            console.log("Both order confirmation emails sent successfully.");
         } else {
-            console.warn("Email credentials not configured. Order details:", orderData);
+            console.warn("\n=== EMAIL CREDENTIALS MISSING ===");
+            console.warn("Would have sent ADMIN email to harsh@thecozee.in for order by", email);
+            console.warn("Would have sent CUSTOMER email to", email);
+            console.warn("=================================\n");
         }
 
         res.json({ success: true });
     } catch (error) {
-        console.error("Email Error:", error);
-        res.status(500).json({ error: "Failed to send order confirmation email" });
+        console.error("Confirmation processing error:", error);
+        res.status(500).json({ error: "Failed to process order confirmation" });
     }
 });
 
