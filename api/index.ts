@@ -101,10 +101,10 @@ app.post("/api/confirm-order", async (req, res) => {
             </tr>
         `).join('');
 
-        // Email 1: To the Admin (harsh@thecozee.in)
+        // Email 1: To the Admin
         const adminMailOptions = {
             from: `"Cozee Store" <${process.env.EMAIL_USER}>`,
-            to: 'harsh@thecozee.in',
+            to: `${process.env.EMAIL_USER}, harsh@thecozee.in`,
             subject: `New Order Received! (${paymentMethod === 'cod' ? 'COD' : 'Prepaid'}) - ${firstName} ${lastName}`,
             html: `
                 <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
@@ -150,7 +150,7 @@ app.post("/api/confirm-order", async (req, res) => {
             subject: `Thank you for your Cozee order! 💖`,
             html: `
                 <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
-                    <h1 style="color: #C11B17; text-align: center;">You're Officialy Part of the Cozee Squad!</h1>
+                    <h1 style="color: #C11B17; text-align: center;">You're Officially Part of the Cozee Squad!</h1>
                     <p style="font-size: 16px;">Hi ${firstName},</p>
                     <p style="font-size: 16px;">Thank you for your order! We're currently packing up your Cozee items and getting them ready for shipping. We will notify you once your package is on its way.</p>
                     
