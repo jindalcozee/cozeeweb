@@ -49,4 +49,16 @@ export const products = [
     contain: true,
     description: 'Add a pop of color to your comfort with the Pink Cozee. Super soft, super warm, and perfectly vibrant for your cozy nights in.',
   },
+  {
+    id: 999,
+    title: 'Test Product',
+    price: '30 INR',
+    originalPrice: '30 INR',
+    category: 'Originals',
+    image: '/navyyy_transparent.png',
+    images: ['/navyyy_transparent.png'],
+    bgColor: '#FFF5EB',
+    contain: true,
+    description: 'This is a sample product used for testing the payment backend.',
+  },
 ];
