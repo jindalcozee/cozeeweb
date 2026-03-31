@@ -77,11 +77,15 @@ app.post("/api/confirm-order", async (req, res) => {
             }
         }
 
+        const isGmail = process.env.EMAIL_USER?.includes('gmail.com');
+        const defaultHost = isGmail ? 'smtp.gmail.com' : 'smtp.office365.com';
+        const defaultPort = isGmail ? '465' : '587';
+        
         // 2. Send Emails via Nodemailer
         const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST || 'smtp.office365.com',
-            port: parseInt(process.env.EMAIL_PORT || '587'),
-            secure: false, 
+            host: process.env.EMAIL_HOST || defaultHost,
+            port: parseInt(process.env.EMAIL_PORT || defaultPort),
+            secure: isGmail ? true : false, 
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS,
