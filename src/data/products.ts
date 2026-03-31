@@ -52,8 +52,8 @@ export const products = [
   {
     id: 999,
     title: 'Test Product',
-    price: '30 INR',
-    originalPrice: '30 INR',
+    price: '1 INR',
+    originalPrice: '1 INR',
     category: 'Originals',
     image: '/navyyy_transparent.png',
     images: ['/navyyy_transparent.png'],
