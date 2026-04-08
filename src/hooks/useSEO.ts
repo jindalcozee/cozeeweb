@@ -13,7 +13,7 @@ export function useSEO({
   title,
   description,
   canonical,
-  ogImage = 'https://thecozee.in/navyyy_transparent.png',
+  ogImage = 'https://thecozee.in/about-lifestyle.png',
   ogType = 'website',
   jsonLd,
 }: SEOProps) {
