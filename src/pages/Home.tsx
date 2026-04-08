@@ -5,8 +5,10 @@ import { Hero3D } from '../components/Hero3D';
 import { FAQ } from '../components/FAQ';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { Testimonials } from '../components/Testimonials';
-import { products, categories } from '../data/products';
+import { useShopifyProducts } from '../hooks/useShopify';
 import { useSEO } from '../hooks/useSEO';
+
+const categories = ['All', 'Originals', 'Blankets', 'Accessories'];
 
 export function Home() {
   const faqSchema = useMemo(() => ({
@@ -95,6 +97,7 @@ export function Home() {
     setSearchParams({ category: cat });
   };
 
+  const { products, loading } = useShopifyProducts();
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -155,9 +158,14 @@ export function Home() {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16">
-        {filteredProducts.map((product, idx) => (
-          <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
+      <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16 min-h-[40vh]">
+        {loading ? (
+          <div className="col-span-2 py-20 flex justify-center items-center">
+            <div className="w-12 h-12 border-4 border-[var(--color-rojo)]/30 border-t-[var(--color-rojo)] rounded-full animate-spin" />
+          </div>
+        ) : (
+          filteredProducts.map((product, idx) => (
+            <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
             <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
               <div
                 className="aspect-square overflow-hidden mb-6 rounded-[2.5rem] relative bg-white/50 group-hover:bg-white transition-colors duration-500 group-hover:shadow-[0_20px_50px_rgba(189,32,37,0.15)]"
@@ -187,7 +195,7 @@ export function Home() {
           </ScrollReveal>
         ))}
 
-        {filteredProducts.length === 0 && (
+      </div>
           <div className="col-span-2 py-20 text-center text-xl opacity-60">
             No products found matching your criteria.
           </div>

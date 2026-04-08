@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { products, categories } from '../data/products';
+import { useShopifyProducts } from '../hooks/useShopify';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { useSEO } from '../hooks/useSEO';
+
+const categories = ['All', 'Originals', 'Blankets', 'Accessories'];
 
 export function Shop() {
     useSEO({
@@ -30,6 +32,7 @@ export function Shop() {
         setSearchParams({ category: cat });
     };
 
+    const { products, loading } = useShopifyProducts();
     const [showFilters, setShowFilters] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -84,39 +87,45 @@ export function Shop() {
             </div>
 
             {/* Standardized Product Grid */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16">
-                {filteredProducts.map((product, idx) => (
-                    <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
-                        <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
-                            <div
-                                className="aspect-square overflow-hidden mb-4 rounded-3xl relative bg-transparent group-hover:shadow-2xl transition-shadow duration-500"
-                            >
-                                <img
-                                    src={product.image}
-                                    alt={product.title}
-                                    className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply object-contain p-4"
-                                    referrerPolicy="no-referrer"
-                                />
-                            </div>
-                            <div className="flex flex-col text-left">
-                                <span className="text-xl md:text-3xl font-extrabold text-[var(--color-rojo)] leading-tight">
-                                    {product.title.split(' - ')[1] || product.title}
-                                </span>
-                                <span className="text-base md:text-lg font-light text-[var(--color-rojo)] mt-0.5">
-                                    Cozee™ Original
-                                </span>
-                                <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-xl md:text-2xl font-extrabold text-[var(--color-rojo)]">{product.price}</span>
-                                    {product.originalPrice && (
-                                        <span className="text-sm md:text-base line-through opacity-40 font-normal text-[var(--color-rojo)]">{product.originalPrice}</span>
-                                    )}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:gap-y-16 min-h-[40vh]">
+                {loading ? (
+                    <div className="col-span-2 py-20 flex justify-center items-center">
+                        <div className="w-12 h-12 border-4 border-[var(--color-rojo)]/30 border-t-[var(--color-rojo)] rounded-full animate-spin" />
+                    </div>
+                ) : (
+                    filteredProducts.map((product, idx) => (
+                        <ScrollReveal key={product.id} width="100%" delay={idx % 4 * 0.1}>
+                            <Link to={`/product/${product.id}`} className="group cursor-pointer flex flex-col transform transition-all duration-500 hover:-translate-y-2">
+                                <div
+                                    className="aspect-square overflow-hidden mb-4 rounded-3xl relative bg-transparent group-hover:shadow-2xl transition-shadow duration-500"
+                                >
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+                                        className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply object-contain p-4"
+                                        referrerPolicy="no-referrer"
+                                    />
                                 </div>
-                            </div>
-                        </Link>
-                    </ScrollReveal>
-                ))}
+                                <div className="flex flex-col text-left">
+                                    <span className="text-xl md:text-3xl font-extrabold text-[var(--color-rojo)] leading-tight">
+                                        {product.title.split(' - ')[1] || product.title}
+                                    </span>
+                                    <span className="text-base md:text-lg font-light text-[var(--color-rojo)] mt-0.5">
+                                        Cozee™ Original
+                                    </span>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <span className="text-xl md:text-2xl font-extrabold text-[var(--color-rojo)]">{product.price}</span>
+                                        {product.originalPrice && (
+                                            <span className="text-sm md:text-base line-through opacity-40 font-normal text-[var(--color-rojo)]">{product.originalPrice}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </Link>
+                        </ScrollReveal>
+                    ))
+                )}
 
-                {filteredProducts.length === 0 && (
+                {!loading && filteredProducts.length === 0 && (
                     <div className="col-span-2 py-20 text-center text-xl text-[var(--color-rojo)]/60">
                         No products found matching your criteria.
                     </div>

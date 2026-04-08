@@ -1,20 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { products } from '../data/products';
 
 export function CartDrawer() {
-  const navigate = useNavigate();
-  const { isCartOpen, toggleCart, cart, updateQuantity, removeFromCart } = useStore();
+  const { isCartOpen, toggleCart, cart, updateQuantity, removeFromCart, checkoutUrl, isLoading } = useStore();
 
-  const cartItems = cart.map(item => ({
-    ...item,
-    product: products.find(p => p.id === item.productId)!
-  })).filter(item => item.product);
-
-  const subtotal = cartItems.reduce((acc, item) => {
-    const priceNum = parseInt(item.product.price.replace(/\D/g, ''));
+  const subtotal = cart.reduce((acc, item) => {
+    // Assuming price is passed as a string like "2199" or number
+    const priceNum = typeof item.price === 'string' ? parseFloat(item.price.replace(/[^\d.-]/g, '')) : (item.price || 0);
     return acc + (priceNum * item.quantity);
   }, 0);
 
@@ -46,8 +39,14 @@ export function CartDrawer() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {cartItems.length === 0 ? (
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 relative">
+              {isLoading && (
+                <div className="absolute inset-0 bg-white/20 backdrop-blur-sm z-10 flex items-center justify-center">
+                  <div className="w-8 h-8 border-4 border-[var(--color-rojo)]/30 border-t-[var(--color-rojo)] rounded-full animate-spin" />
+                </div>
+              )}
+
+              {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-[var(--color-rojo)]/50 space-y-4">
                   <p className="text-xl font-medium">Your cart is empty</p>
                   <button onClick={toggleCart} className="text-[var(--color-rojo)] border-b border-[var(--color-rojo)] pb-1 hover:opacity-70 transition-opacity cursor-pointer">
@@ -55,27 +54,27 @@ export function CartDrawer() {
                   </button>
                 </div>
               ) : (
-                cartItems.map((item) => (
-                  <div key={item.productId} className="flex gap-4 bg-white/50 p-4 rounded-2xl border border-[var(--color-rojo)]/10">
+                cart.map((item) => (
+                  <div key={item.lineId || item.productId} className="flex gap-4 bg-white/50 p-4 rounded-2xl border border-[var(--color-rojo)]/10">
                     <div className="w-20 h-20 bg-transparent rounded-xl border border-[#C11B17] overflow-hidden flex-shrink-0">
-                      <img src={item.product.image} alt={item.product.title} className="w-full h-full object-contain mix-blend-multiply p-1" />
+                      <img src={item.image} alt={item.title} className="w-full h-full object-contain mix-blend-multiply p-1" />
                     </div>
                     <div className="flex-1 flex flex-col justify-between">
                       <div className="flex justify-between items-start">
-                        <h3 className="font-medium text-[var(--color-rojo)] leading-tight">{item.product.title}</h3>
-                        <button onClick={() => removeFromCart(item.productId)} className="text-[var(--color-rojo)]/40 hover:text-[var(--color-rojo)] transition-colors cursor-pointer">
+                        <h3 className="font-medium text-[var(--color-rojo)] leading-tight">{item.title}</h3>
+                        <button onClick={() => item.lineId && removeFromCart(item.lineId)} className="text-[var(--color-rojo)]/40 hover:text-[var(--color-rojo)] transition-colors cursor-pointer">
                           <Trash2 size={18} />
                         </button>
                       </div>
-                      <div className="text-[var(--color-rojo)]/80 font-medium">{item.product.price}</div>
+                      <div className="text-[var(--color-rojo)]/80 font-medium">INR {item.price}</div>
                       
                       <div className="flex items-center gap-4 mt-2">
                         <div className="flex items-center border border-[var(--color-rojo)]/20 rounded-full overflow-hidden">
-                          <button onClick={() => updateQuantity(item.productId, item.quantity - 1)} className="px-3 py-1 hover:bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] transition-colors cursor-pointer">
+                          <button onClick={() => item.lineId && updateQuantity(item.lineId, item.quantity - 1)} className="px-3 py-1 hover:bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] transition-colors cursor-pointer">
                             <Minus size={14} />
                           </button>
                           <span className="w-8 text-center text-sm font-medium text-[var(--color-rojo)]">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.productId, item.quantity + 1)} className="px-3 py-1 hover:bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] transition-colors cursor-pointer">
+                          <button onClick={() => item.lineId && updateQuantity(item.lineId, item.quantity + 1)} className="px-3 py-1 hover:bg-[var(--color-rojo)]/10 text-[var(--color-rojo)] transition-colors cursor-pointer">
                             <Plus size={14} />
                           </button>
                         </div>
@@ -86,20 +85,22 @@ export function CartDrawer() {
               )}
             </div>
 
-            {cartItems.length > 0 && (
+            {cart.length > 0 && (
               <div className="p-6 border-t border-[var(--color-rojo)]/10 bg-white/30">
                 <div className="flex justify-between items-center mb-6 text-xl font-bold text-[var(--color-rojo)]">
                   <span>Subtotal</span>
-                  <span>{subtotal} INR</span>
+                  <span>{subtotal.toLocaleString()} INR</span>
                 </div>
                 <button 
                   onClick={() => {
-                    toggleCart();
-                    navigate('/checkout');
+                    if (checkoutUrl) {
+                      window.location.href = checkoutUrl;
+                    }
                   }}
-                  className="w-full py-4 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-medium text-lg hover:bg-[var(--color-rojo)]/90 transition-colors cursor-pointer"
+                  disabled={!checkoutUrl || isLoading}
+                  className="w-full py-4 bg-[var(--color-rojo)] text-[var(--color-crema)] rounded-full font-medium text-lg hover:bg-[var(--color-rojo)]/90 transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  Checkout
+                  {checkoutUrl ? 'Secure Checkout' : 'Preparing Checkout...'}
                 </button>
               </div>
             )}

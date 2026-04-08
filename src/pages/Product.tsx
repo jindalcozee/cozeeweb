@@ -1,6 +1,6 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Check, Truck, ShieldCheck, ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { products } from '../data/products';
+import { useShopifyProducts } from '../hooks/useShopify';
 import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FAQ } from '../components/FAQ';
@@ -11,17 +11,17 @@ import { useSEO } from '../hooks/useSEO';
 
 export function Product() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { addToCart } = useStore();
+  const { products, loading } = useShopifyProducts();
+  const { addToCart, checkoutUrl } = useStore();
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const buyButtonsRef = useRef<HTMLDivElement>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
 
-  const product = products.find(p => p.id === Number(id));
+  const product = products.find(p => p.id === id);
 
   // Extract color name from product title (e.g., "Cozee™ Original - Navy" -> "Navy Blue")
-  const colorName = product?.title.split(' - ')[1] || '';
+  const colorName = product?.title.split(' - ')[1] || product?.title || '';
 
   const productSchema = useMemo(() => {
     if (!product) return undefined;
@@ -83,12 +83,25 @@ export function Product() {
     return () => observer.disconnect();
   }, [id]);
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (product) {
-      addToCart(product.id);
-      navigate('/checkout');
+      await addToCart(product.variantId, { 
+        title: product.title, 
+        image: product.image, 
+        price: product.price 
+      });
+      // The store toggleCart handles opening the drawer automatically when added
     }
   };
+
+  if (loading) {
+     return (
+        <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 border-4 border-[var(--color-rojo)]/30 border-t-[var(--color-rojo)] rounded-full animate-spin mb-4" />
+            <p className="text-xl font-medium text-[var(--color-rojo)]/70">Warming up your Cozee...</p>
+        </div>
+     );
+  }
 
   if (!product) {
     return (
@@ -244,7 +257,7 @@ export function Product() {
 
           <div ref={buyButtonsRef} className="flex flex-col gap-4">
             <button
-              onClick={() => addToCart(product.id)}
+              onClick={() => addToCart(product.variantId, { title: product.title, image: product.image, price: product.price })}
               className="w-full py-5 border-2 border-[var(--color-rojo)] text-[var(--color-rojo)] rounded-full font-bold text-xl hover:bg-[var(--color-rojo)]/5 transition-all cursor-pointer"
             >
               Add to Cart
